@@ -1,11 +1,13 @@
 # Environment variables
 .env
 
-# Log files
-logs/
+# Log files (keep directory)
+logs/*
+!logs/.gitkeep
 
-# Uploaded images
-public/uploads/
+# Uploaded images (keep directory)
+public/uploads/*
+!public/uploads/.gitkeep
 
 # System files
 .DS_Store
