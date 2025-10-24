@@ -1,4 +1,4 @@
-# The Cookie Lovestoblog
+# The Cookie
 
 A simple PHP + MySQL recipe sharing app using Tailwind CSS (CDN). Includes login/register, profile, add/edit recipes with images, likes, comments, search, and pagination.
 
