@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['role'] = $user['role'];
 
                 // Redirect to dashboard
-                header("Location: /blog/public/dashboard.php");
+                header("Location: /blog/public/view_recipes.php");
                 exit;
             } else {
                 $errors[] = 'Invalid email or password.';
