@@ -1,0 +1,16 @@
+# Environment variables
+.env
+
+# Log files
+logs/
+
+# Uploaded images
+public/uploads/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE/editor files
+.vscode/
+.idea/
