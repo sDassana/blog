@@ -1,10 +1,10 @@
 # The Cookie – PHP Recipe Sharing Blog
 
-The Cookie Lovestoblog is a modern, responsive recipe sharing platform built with PHP 8 and MySQL. It features user authentication, profile management, recipe CRUD with images and steps, likes, comments, search with pagination, and built in pure PHP with a lightweight structure and no framework dependencies.
+The Cookie is a modern, responsive recipe sharing platform built with PHP 8 and MySQL. It features user authentication, profile management, recipe CRUD with images and steps, likes, comments, search with pagination, and built in pure PHP with a lightweight structure and no framework dependencies.
 
 ## Live Demo
 
-- Website: 
+- Website: Coming soon 
 
 ## Overview
 
@@ -154,6 +154,7 @@ Additional safeguards:
 - Prepared statements for all DB operations (via PDO)
 - Error details are logged to `logs/errors.log`; users see a generic message
 - Consider enforcing HTTPS in production via web server config or `.htaccess`
+- `public/uploads/` is protected by an `.htaccess` that blocks script execution; uploaded filenames are sanitized and saved with safe, MIME-validated extensions
 
 ## Database Schema (expected)
 
@@ -192,14 +193,25 @@ If you need, we can generate a SQL schema and seed data matching this codebase.
 - Local: XAMPP (Apache + MySQL) — place under `htdocs` and configure `.env`
 - Production: any PHP hosting with MySQL — configure virtual host and `.env`
 - Ensure `public/uploads/` is writable by the web server
-- Enforce HTTPS and secure session settings in production
+- Enforce HTTPS and secure session settings in production (you can use an `.htaccess` redirect)
+- Optional: compatible with popular free/shared PHP hosts (for example, InfinityFree); remember to set correct DB credentials and enable SSL if available
+
+## Developer
+
+- Sathnuwan Dassana
 
 ## License and Usage
 
-For educational/demo use. Add a license file if you plan to open-source.
+This project is created for learning and portfolio purposes. You’re welcome to explore, learn from, and extend the code. If you reuse substantial parts of the design or implementation, please credit “Sathnuwan Dassana – The Cookie.”
 
 ## Acknowledgements
 
-- Tailwind CSS (CDN) for fast UI development
-- PHP and MySQL documentation
-- Community resources and tutorials that inspired this build
+- Tailwind CSS for rapid UI development
+- Official PHP and MySQL documentation
+- GitHub Student Developer Pack (optional tools and credits)
+
+## Final Deployment
+
+- Production: add your live URL here once deployed
+
+
