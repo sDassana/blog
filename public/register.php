@@ -10,8 +10,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Create account · The Cookie Lovestoblog</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <title>Create account · The Cookie Lovestoblog</title>
+  <link rel="stylesheet" href="/blog/public/css/app.css" />
+  
   </head>
   <body class="min-h-screen bg-white text-gray-800">
     <?php include __DIR__ . '/partials/topbar.php'; ?>

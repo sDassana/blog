@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>404 · The Cookie Lovestoblog</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/blog/public/css/app.css" />
+  
   </head>
   <body class="min-h-screen bg-white text-gray-800 flex items-center">
     <main class="max-w-xl mx-auto px-4 text-center">

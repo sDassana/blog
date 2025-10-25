@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../src/helpers/markdown.php';
 
 $recipe_id = $_GET['id'] ?? null;
 
@@ -57,7 +58,8 @@ if ($returnSearch !== '') {
     <meta charset="UTF-8" />
     <title><?= htmlspecialchars($recipe['title']) ?> · The Cookie Lovestoblog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/blog/public/css/app.css" />
+    
 </head>
 
 <body class="min-h-screen bg-white text-gray-800">
@@ -90,15 +92,29 @@ if ($returnSearch !== '') {
                     $likeCount = $likeCountStmt->fetchColumn();
 
                     $isLiked = false;
+                    $isSaved = false;
                     if (isset($_SESSION['user_id'])) {
                         $checkLike = $pdo->prepare("SELECT id FROM recipe_likes WHERE recipe_id = :id AND user_id = :uid");
                         $checkLike->execute(['id' => $recipe_id, 'uid' => $_SESSION['user_id']]);
                         $isLiked = $checkLike->rowCount() > 0;
+
+                        try {
+                            $checkSave = $pdo->prepare("SELECT id FROM recipe_saves WHERE recipe_id = :id AND user_id = :uid");
+                            $checkSave->execute(['id' => $recipe_id, 'uid' => $_SESSION['user_id']]);
+                            $isSaved = $checkSave->rowCount() > 0;
+                        } catch (Exception $e) {
+                            $isSaved = false;
+                        }
                     }
                     ?>
-                    <div id="likeSection" class="my-3 flex items-center gap-2 text-gray-700">
-                        <button id="likeButton" class="inline-flex items-center rounded-[15px] border border-[#ff6347] text-[#ff6347] px-3 py-1 text-sm hover:bg-[#ff6347]/10" title="Like">
-                            <?= $isLiked ? 'Unlike' : 'Like' ?>
+                    <div id="likeSection" class="my-3 flex items-center gap-3 text-gray-700">
+                        <button id="likeButton" class="inline-flex items-center gap-1 rounded-[15px] border px-3 py-1 text-sm <?= $isLiked ? 'border-[#ff6347] text-[#ff6347] bg-[#ff6347]/10' : 'border-gray-300 text-gray-700 hover:bg-gray-50' ?>" title="Like">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="<?= $isLiked ? '#ff6347' : 'none' ?>" stroke="<?= $isLiked ? '#ff6347' : 'currentColor' ?>" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7.5 21h7.125a3.375 3.375 0 003.32-2.71l1.194-6.375A2.25 2.25 0 0016.92 9H13.5V6.75A2.25 2.25 0 0011.25 4.5h-.9c-.621 0-1.17.42-1.311 1.023L7.5 9m0 12V9m0 12H5.25A2.25 2.25 0 013 18.75V12.75A2.25 2.25 0 015.25 10.5H7.5" /></svg>
+                            <span><?= $isLiked ? 'Liked' : 'Like' ?></span>
+                        </button>
+                        <button id="saveButton" class="inline-flex items-center gap-1 rounded-[15px] border px-3 py-1 text-sm <?= $isSaved ? 'border-[#ff6347] text-[#ff6347] bg-[#ff6347]/10' : 'border-gray-300 text-gray-700 hover:bg-gray-50' ?>" title="Save">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="<?= $isSaved ? '#ff6347' : 'none' ?>" stroke="<?= $isSaved ? '#ff6347' : 'currentColor' ?>" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.25 3.75A2.25 2.25 0 017.5 1.5h9a2.25 2.25 0 012.25 2.25v17.19a.75.75 0 01-1.132.65L12 17.25l-5.618 4.34a.75.75 0 01-1.132-.65V3.75z" /></svg>
+                            <span><?= $isSaved ? 'Saved' : 'Save' ?></span>
                         </button>
                         <span id="likeCount" class="text-sm font-medium"><?= $likeCount ?></span>
                         <span class="text-sm">likes</span>
@@ -107,7 +123,13 @@ if ($returnSearch !== '') {
                         <img src="<?= htmlspecialchars('../public/' . $recipe['image_main']) ?>" alt="Recipe Image" class="w-full max-w-full md:max-w-3xl h-auto rounded-lg mb-4">
                     <?php endif; ?>
 
-                    <!-- Mobile/Tablet ingredients block: shown below title/photo, hidden on desktop -->
+                    <?php if (!empty($recipe['description'])): ?>
+                        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-4">
+                            <div class="text-gray-800 text-base"><?php echo md_to_html($recipe['description']); ?></div>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- Mobile/Tablet ingredients block: shown below title/photo and description, hidden on desktop -->
                     <div class="block lg:hidden bg-white border border-gray-200 rounded-xl shadow p-5 mb-6">
                         <h2 class="text-lg font-semibold mb-3">Ingredients for <?= htmlspecialchars($recipe['title']) ?></h2>
                         <table class="w-full text-sm">
@@ -126,7 +148,7 @@ if ($returnSearch !== '') {
                         <?php foreach ($steps as $step): ?>
                             <div class="">
                                 <h3 class="font-semibold">Step <?= $step['step_number'] ?></h3>
-                                <p class="text-gray-700"><?= nl2br(htmlspecialchars($step['step_description'])) ?></p>
+                                <div class="text-gray-700"><?php echo md_to_html($step['step_description']); ?></div>
                                 <?php if ($step['step_image']): ?>
                                     <img src="<?= htmlspecialchars('../public/' . $step['step_image']) ?>" alt="Step image" class="mt-2 rounded-lg max-w-full h-auto">
                                 <?php endif; ?>
@@ -190,12 +212,45 @@ if ($returnSearch !== '') {
                     body: formData
                 });
                 const data = await res.json();
-                if (data.status === 'liked') {
-                    likeBtn.textContent = 'Unlike';
-                    likeCount.textContent = parseInt(likeCount.textContent) + 1;
-                } else if (data.status === 'unliked') {
-                    likeBtn.textContent = 'Like';
-                    likeCount.textContent = parseInt(likeCount.textContent) - 1;
+                if (data.status === 'liked' || data.status === 'unliked') {
+                    const svg = likeBtn.querySelector('svg');
+                    const span = likeBtn.querySelector('span');
+                    if (data.status === 'liked') {
+                        likeBtn.className = 'inline-flex items-center gap-1 rounded-[15px] border px-3 py-1 text-sm border-[#ff6347] text-[#ff6347] bg-[#ff6347]/10';
+                        if (svg) { svg.setAttribute('fill', '#ff6347'); svg.setAttribute('stroke', '#ff6347'); }
+                        if (span) { span.textContent = 'Liked'; }
+                        likeCount.textContent = parseInt(likeCount.textContent) + 1;
+                    } else {
+                        likeBtn.className = 'inline-flex items-center gap-1 rounded-[15px] border px-3 py-1 text-sm border-gray-300 text-gray-700 hover:bg-gray-50';
+                        if (svg) { svg.setAttribute('fill', 'none'); svg.setAttribute('stroke', 'currentColor'); }
+                        if (span) { span.textContent = 'Like'; }
+                        likeCount.textContent = parseInt(likeCount.textContent) - 1;
+                    }
+                } else if (data.error) {
+                    alert(data.error);
+                }
+            });
+        }
+
+        const saveBtn = document.getElementById('saveButton');
+        if (saveBtn) {
+            saveBtn.addEventListener('click', async () => {
+                const fd = new FormData();
+                fd.append('recipe_id', <?= json_encode($recipe_id) ?>);
+                const res = await fetch('../src/controllers/toggle_save.php', { method: 'POST', body: fd });
+                const data = await res.json();
+                if (data.status === 'saved' || data.status === 'unsaved') {
+                    const svg = saveBtn.querySelector('svg');
+                    const span = saveBtn.querySelector('span');
+                    if (data.status === 'saved') {
+                        saveBtn.className = 'inline-flex items-center gap-1 rounded-[15px] border px-3 py-1 text-sm border-[#ff6347] text-[#ff6347] bg-[#ff6347]/10';
+                        if (svg) { svg.setAttribute('fill', '#ff6347'); svg.setAttribute('stroke', '#ff6347'); }
+                        if (span) { span.textContent = 'Saved'; }
+                    } else {
+                        saveBtn.className = 'inline-flex items-center gap-1 rounded-[15px] border px-3 py-1 text-sm border-gray-300 text-gray-700 hover:bg-gray-50';
+                        if (svg) { svg.setAttribute('fill', 'none'); svg.setAttribute('stroke', 'currentColor'); }
+                        if (span) { span.textContent = 'Save'; }
+                    }
                 } else if (data.error) {
                     alert(data.error);
                 }

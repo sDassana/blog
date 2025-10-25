@@ -7,8 +7,9 @@ require_once __DIR__ . '/../src/helpers/flash.php';
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Reset Password · The Cookie Lovestoblog</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <title>Reset Password · The Cookie Lovestoblog</title>
+  <link rel="stylesheet" href="/blog/public/css/app.css" />
+  
   </head>
   <body class="min-h-screen bg-white text-gray-800">
     <?php include __DIR__ . '/partials/topbar.php'; ?>

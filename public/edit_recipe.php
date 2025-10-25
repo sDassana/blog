@@ -33,7 +33,8 @@ $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Edit Recipe · The Cookie Lovestoblog</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/blog/public/css/app.css" />
+  
   </head>
   <body class="min-h-screen bg-white text-gray-800">
     <?php include __DIR__ . '/partials/topbar.php'; ?>
@@ -52,13 +53,34 @@ $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
             <label class="block text-sm text-gray-600 mb-1">Category</label>
             <select name="category" required class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]">
               <?php
-              $cats = ['Main Dish','Dessert','Drink'];
+              $cats = [
+                'Appetizer / Starter',
+                'Main Course',
+                'Side Dish',
+                'Dessert',
+                'Snack',
+                'Soup / Salad',
+                'Bread / Pastry',
+                'Drink / Beverage',
+                'Sauce / Dip / Spread'
+              ];
               foreach ($cats as $cat) {
                   $sel = ($recipe['category'] === $cat) ? 'selected' : '';
-                  echo "<option value='$cat' $sel>$cat</option>";
+                  $val = htmlspecialchars($cat, ENT_QUOTES, 'UTF-8');
+                  echo "<option value=\"$val\" $sel>$val</option>";
               }
               ?>
             </select>
+          </div>
+
+          <div class="mb-2">
+            <label for="description" class="block text-sm text-gray-600 mb-1">Short Description</label>
+            <p class="text-xs text-gray-600 mb-1">Markdown supported: **bold**, _italic_, `code`, lists, links.</p>
+            <textarea id="description" name="description" rows="4" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-amber-400" placeholder="Short description (Markdown supported)"><?= htmlspecialchars($recipe['description'] ?? '') ?></textarea>
+            <div class="mt-2">
+              <div class="text-xs text-gray-500 mb-1">Preview</div>
+              <div id="descPreview" class="min-h-10 text-sm bg-gray-50 border border-gray-200 rounded-lg p-3"></div>
+            </div>
           </div>
 
           <div>
@@ -69,7 +91,14 @@ $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
           <div>
             <label class="block text-sm text-gray-600 mb-1">Replace main image (optional)</label>
             <input type="hidden" name="existing_image_main" value="<?= htmlspecialchars($recipe['image_main']) ?>">
-            <input type="file" name="image_main" accept="image/*" class="block w-full text-sm text-gray-700">
+            <div class="modern-file flex items-center">
+              <input id="image_main" type="file" name="image_main" accept="image/*" class="hidden">
+               <label for="image_main" class="inline-flex items-center rounded-[15px] bg-black text-white px-4 py-2 font-semibold shadow hover:bg-black/90 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4 mr-2"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7.5h3l1.5-2.25h9L18 7.5h3A1.5 1.5 0 0122.5 9v9A1.5 1.5 0 0121 19.5H3A1.5 1.5 0 011.5 18V9A1.5 1.5 0 013 7.5zm9 9a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z"/></svg>
+                Upload image
+              </label>
+              <span class="file-name text-sm text-gray-600 ml-3">No file chosen</span>
+            </div>
           </div>
 
           <div>
@@ -78,7 +107,7 @@ $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
               <?php foreach ($ingredients as $ing): ?>
                 <div class="flex flex-col sm:flex-row gap-2">
                   <input type="text" name="ingredient_name[]" value="<?= htmlspecialchars($ing['ingredient_name']) ?>" required class="flex-1 rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]">
-                  <input type="text" name="ingredient_qty[]" value="<?= htmlspecialchars($ing['quantity']) ?>" required class="w-full sm:w-40 rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]">
+                  <input type="text" name="ingredient_qty[]" value="<?= htmlspecialchars($ing['quantity']) ?>" placeholder="Quantity (optional)" class="w-full sm:w-40 rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]">
                 </div>
               <?php endforeach; ?>
             </div>
@@ -88,11 +117,23 @@ $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
           <div>
             <h3 class="text-lg font-semibold mb-2">Steps</h3>
             <div id="steps" class="space-y-3">
-              <?php foreach ($steps as $s): ?>
+              <?php foreach ($steps as $i => $s): ?>
                 <div>
-                  <textarea name="step_description[]" rows="3" required class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]"><?= htmlspecialchars($s['step_description']) ?></textarea>
+                  <p class="text-xs text-gray-600 mb-1">Markdown supported</p>
+                  <textarea name="step_description[]" rows="4" required class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]"><?= htmlspecialchars($s['step_description']) ?></textarea>
+                  <div class="mt-2">
+                    <div class="text-xs text-gray-500 mb-1">Preview</div>
+                    <div class="step-preview min-h-10 text-sm bg-gray-50 border border-gray-200 rounded-lg p-3"></div>
+                  </div>
                   <input type="hidden" name="step_existing_image[]" value="<?= htmlspecialchars($s['step_image'] ?? '') ?>">
-                  <input type="file" name="step_image[]" accept="image/*" class="mt-2 block w-full text-sm text-gray-700">
+                  <div class="modern-file mt-2 flex items-center">
+                    <input id="step_image_<?= $i ?>" type="file" name="step_image[]" accept="image/*" class="hidden">
+                     <label for="step_image_<?= $i ?>" class="inline-flex items-center rounded-[15px] bg-black text-white px-4 py-2 font-semibold shadow hover:bg-black/90 cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4 mr-2"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7.5h3l1.5-2.25h9L18 7.5h3A1.5 1.5 0 0122.5 9v9A1.5 1.5 0 0121 19.5H3A1.5 1.5 0 011.5 18V9A1.5 1.5 0 013 7.5zm9 9a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z"/></svg>
+                        Upload step image
+                    </label>
+                    <span class="file-name text-sm text-gray-600 ml-3">No file chosen</span>
+                  </div>
                 </div>
               <?php endforeach; ?>
             </div>
@@ -106,21 +147,60 @@ $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
     </main>
 
-    <script>
+    <script type="module">
+      import { attachLiveMarkdownPreview } from './js/markdown.js';
+      import { initModernFileInput } from './js/file-input.js';
+
       function addIngredient() {
         const div = document.createElement('div');
         div.className = 'flex flex-col sm:flex-row gap-2';
   div.innerHTML = '<input type="text" name="ingredient_name[]" placeholder="Ingredient" required class="flex-1 rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]" />' +
-      '<input type="text" name="ingredient_qty[]" placeholder="Quantity" required class="w-full sm:w-40 rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]" />';
+    '<input type="text" name="ingredient_qty[]" placeholder="Quantity (optional)" class="w-full sm:w-40 rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]" />';
         document.getElementById('ingredients').appendChild(div);
       }
 
       function addStep() {
         const div = document.createElement('div');
-  div.innerHTML = '<textarea name="step_description[]" rows="3" placeholder="Step description" required class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]"></textarea>' +
-                        '<input type="file" name="step_image[]" accept="image/*" class="mt-2 block w-full text-sm text-gray-700" />';
+  const stepInputId = 'step_image_' + Date.now();
+  div.innerHTML = '<p class="text-xs text-gray-600 mb-1">Markdown supported</p>' +
+                  '<textarea name="step_description[]" rows="4" placeholder="Step description (Markdown supported)" required class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]"></textarea>' +
+                  '<div class="mt-2">' +
+                    '<div class="text-xs text-gray-500 mb-1">Preview</div>' +
+                    '<div class="step-preview min-h-10 text-sm bg-gray-50 border border-gray-200 rounded-lg p-3"></div>' +
+                  '</div>' +
+                  '<div class="modern-file mt-2 flex items-center">' +
+                    '<input id="' + stepInputId + '" type="file" name="step_image[]" accept="image/*" class="hidden" />' +
+                    '<label for="' + stepInputId + '" class="inline-flex items-center rounded-[15px] bg-black text-white px-4 py-2 font-semibold shadow hover:bg-black/90 cursor-pointer">' +
+                      '<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" class=\"w-4 h-4 mr-2\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M3 7.5h3l1.5-2.25h9L18 7.5h3A1.5 1.5 0 0122.5 9v9A1.5 1.5 0 0121 19.5H3A1.5 1.5 0 011.5 18V9A1.5 1.5 0 013 7.5zm9 9a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z\"/></svg>' +
+                      'Upload step image' +
+                    '</label>' +
+                    '<span class="file-name text-sm text-gray-600 ml-3">No file chosen</span>' +
+                  '</div>';
         document.getElementById('steps').appendChild(div);
+
+        const ta = div.querySelector('textarea[name="step_description[]"]');
+        const pv = div.querySelector('.step-preview');
+        attachLiveMarkdownPreview(ta, pv);
+        // Initialize modern file input for the newly added step
+        initModernFileInput(div);
       }
+
+      window.addIngredient = addIngredient;
+      window.addStep = addStep;
+
+      // Description preview
+      const descTa = document.getElementById('description');
+      const descPv = document.getElementById('descPreview');
+      if (descTa && descPv) attachLiveMarkdownPreview(descTa, descPv);
+
+      // Existing step previews
+      document.querySelectorAll('#steps textarea[name="step_description[]"]').forEach((ta) => {
+        const pv = ta.closest('div').querySelector('.step-preview');
+        if (pv) attachLiveMarkdownPreview(ta, pv);
+      });
+
+      // Initialize modern file inputs on load
+      initModernFileInput(document);
     </script>
     <?php include __DIR__ . '/partials/footer.php'; ?>
   </body>

@@ -1,80 +1,205 @@
-# The Cookie
+# The Cookie – PHP Recipe Sharing Blog
 
-A simple PHP + MySQL recipe sharing app using Tailwind CSS (CDN). Includes login/register, profile, add/edit recipes with images, likes, comments, search, and pagination.
+The Cookie Lovestoblog is a modern, responsive recipe sharing platform built with PHP 8 and MySQL. It features user authentication, profile management, recipe CRUD with images and steps, likes, comments, search with pagination, and built in pure PHP with a lightweight structure and no framework dependencies.
 
-## Requirements
+## Live Demo
 
-- PHP 8.x
-- MySQL/MariaDB
-- Web server (Apache via XAMPP is fine)
-- Composer (optional – this project currently has no PHP dependencies, `composer.json` is empty)
+- Website: 
 
-## Quick start (XAMPP on Windows)
+## Overview
 
-1. Place this repository under your XAMPP htdocs (e.g. `C:\xampp\htdocs\blog`).
-2. Ensure Apache and MySQL are running.
-3. Copy `.env.example` to `.env` and set your DB credentials:
+Users can:
 
-   ```env
-   DB_HOST=127.0.0.1
-   DB_NAME=recipe_blog_app
-   DB_USER=root
-   DB_PASS=
-   DB_PORT=3306
-   ```
+- Register, login, logout, and manage profiles (display name, email, password)
+- Create, edit, and delete recipes with main images, ingredients, and step-by-step photos
+- Like/unlike recipes and post comments
+- Browse with search (title/tags)
+- Navigate a responsive, accessible UI that adapts to Desktop and Mobile devices
 
-4. Create the database named in `DB_NAME` (default: `recipe_blog_app`).
-5. Ensure required tables exist (see "Database tables" below). If you don't have a schema yet, I can help generate one based on the app.
-6. Visit the app in your browser:
-   - http://localhost/blog/public/view_recipes.php
-   - Auth pages are under `/blog/public/login.php` and `/blog/public/register.php`.
+## Tech Stack
 
-## Configuration and security
+| Layer           | Technology                                                  |
+| --------------- | ----------------------------------------------------------- |
+| Frontend        | HTML5, Tailwind CSS, JavaScript                             |
+| Backend         | PHP 8+ (procedural with sessions)                           |
+| Database        | MySQL (MariaDB for infinityfree)                            |
+| Hosting         | Apache (XAMPP locally; any PHP host in production)          |
+| Version Control | Git + GitHub                                                |
+| Security        | `.env` config, prepared statements, server-side logging     |
 
-- Never commit your real `.env`. The repo ignores it via `.gitignore`.
-- A safe `.env.example` is provided for local setup.
-- Logs and uploads are not committed; only their directories are tracked using `.gitkeep`:
-  - `logs/` (ignored except for `.gitkeep`)
-  - `public/uploads/` (ignored except for `.gitkeep`)
-- If using GitHub, consider using your `users.noreply.github.com` email to avoid exposing a private address.
+## Core Features
 
-## Where things live
+### Authentication and Profile
 
-- Public entrypoints: `public/` (e.g., `view_recipes.php`, `recipe.php`, `login.php`)
-- Shared UI: `public/partials/topbar.php`, `public/partials/footer.php`
-- Controllers: `src/controllers/`
-- Helpers: `src/helpers/`
-- Config and DB: `config/config.php` (loads `.env` and creates `$pdo`)
-- Assets: `public/assets/` (put your `brand.png` here)
-- Uploads: `public/uploads/`
-- Logs: `logs/`
+- Register/login/logout using `password_hash()` and `password_verify()`
+- Secure sessions and flash messaging
+- Profile fields: display name, about, avatar upload
 
-## Database tables (expected by the app)
+### Recipe CRUD
 
-Based on current queries, you will need these tables:
+- Create, read, update, and delete recipes
+- Main image upload stored under `public/uploads/`
+- Ingredients list and ordered steps with optional step images
 
-- `user` (id, username, email, password_hash, role, about, avatar, created_at, ...)
-- `recipe` (id, user_id, title, category, tags, image_main, created_at, ...)
-- `recipe_ingredients` (id, recipe_id, ingredient_name, quantity)
-- `recipe_steps` (id, recipe_id, step_number, step_description, step_image)
-- `recipe_likes` (id, recipe_id, user_id, created_at)
-- `recipe_comments` (id, recipe_id, user_id, comment_text, created_at)
+### Likes and Comments
 
-If you want, I can scaffold a SQL schema and seed script to match the code.
+- Like or unlike recipes; live like count
+- Comment system with user attribution and timestamps
 
-## Development notes
+### Search and Pagination
 
-- Tailwind CSS is loaded via CDN in each page. No build step required.
-- Theming: white background, creamy off-white navbar (`#FAF7F2`), tomato accent (`#ff6347`), and 15px-rounded primary controls.
-- Images are uploaded to `public/uploads/` and referenced relative to `public/`.
-- Error details are logged to `logs/errors.log`; users see a friendly 500 when DB fails.
+- Search by recipe title or tags (safe prepared statements)
+- Paginated listing (15 per page) with context-preserving back links
 
-## Troubleshooting
+### Responsive UI and Theming
 
-- 500 errors when loading a page: check `logs/errors.log` and DB credentials in `.env`.
-- Search query errors: ensure tables exist and `recipe.tags` column is present.
-- Upload issues: verify `public/uploads/` is writable by the web server.
+- Tailwind CSS utility-first design (compiled via PostCSS/Tailwind CLI)
+- Theme: white background, creamy off-white navbar (`#FAF7F2`), tomato accent (`#ff6347`), 15px-rounded primary controls
 
-## License
+## Project Structure
 
-This project is for educational/demo purposes. Add a proper license if you plan to open source.
+```
+blog/
+├── .env.example
+├── .gitignore
+├── .htaccess
+├── composer.json
+├── index.php
+├── package.json                      # Tailwind/PostCSS build scripts
+├── package-lock.json
+├── postcss.config.js                 # PostCSS/Autoprefixer config
+├── tailwind.config.js                # Tailwind config (content paths/theme)
+├── README.md
+├── structure.md                      # Full tree with descriptions
+├── config/
+│   └── config.php                    # Loads .env, creates $pdo, logs errors
+├── logs/
+│   ├── errors.log                    # Runtime error log (ignored in Git)
+│   └── .gitkeep
+├── public/
+│   ├── 404.php
+│   ├── 500.php
+│   ├── about.php
+│   ├── add_recipe.php
+│   ├── dashboard.php
+│   ├── edit_recipe.php
+│   ├── forgot_password.php
+│   ├── login.php
+│   ├── recipe.php
+│   ├── register.php
+│   ├── saved_recipes.php
+│   ├── view_recipes.php
+│   ├── assets/
+│   │   ├── brand.png
+│   │   ├── hero-cookies.svg
+│   │   └── icons/
+│   │       ├── facebook.png
+│   │       ├── instagram.png
+│   │       ├── linkedin.png
+│   │       └── x.png
+│   ├── css/
+│   │   ├── app.css                   # Tailwind compiled output
+│   │   └── tw-input.css              # Tailwind input (with @tailwind)
+│   ├── js/
+│   │   ├── file-input.js
+│   │   └── markdown.js
+│   ├── partials/
+│   │   ├── footer.php
+│   │   └── topbar.php
+│   └── uploads/
+│       ├── .htaccess                 # Blocks script execution
+│       ├── .gitkeep
+│       └── avatars/
+│           └── (user avatar files)
+└── src/
+    ├── controllers/
+    │   ├── add_comment.php
+    │   ├── add_recipe.php
+    │   ├── delete_comment.php
+    │   ├── delete_recipe.php
+    │   ├── login.php
+    │   ├── logout.php
+    │   ├── register.php
+    │   ├── reset_password.php
+    │   ├── toggle_like.php
+    │   ├── toggle_save.php
+    │   ├── update_email.php
+    │   ├── update_password.php
+    │   ├── update_profile.php
+    │   └── update_recipe.php
+    ├── helpers/
+    │   ├── flash.php
+    │   ├── markdown.php
+    │   ├── recovery_words.php
+    │   └── redirect.php
+    └── styles/
+        └── input.css
+```
+
+## Security and Configuration
+
+Environment variables in `.env` (kept out of Git):
+
+```env
+DB_HOST=127.0.0.1
+DB_NAME=recipe_blog_app
+DB_USER=root
+DB_PASS=
+DB_PORT=3306
+```
+
+Additional safeguards:
+
+- `.gitignore` prevents committing `.env`, logs, and uploaded files; only `.gitkeep` placeholders are tracked
+- Prepared statements for all DB operations (via PDO)
+- Error details are logged to `logs/errors.log`; users see a generic message
+- Consider enforcing HTTPS in production via web server config or `.htaccess`
+
+## Database Schema (expected)
+
+Tables used by the app:
+
+- `user` (`id`, `username`, `email`, `password_hash`, `role`, `about`, `avatar`, `created_at`)
+- `recipe` (`id`, `user_id`, `title`, `category`, `tags`, `image_main`, `created_at`)
+- `recipe_ingredients` (`id`, `recipe_id`, `ingredient_name`, `quantity`)
+- `recipe_steps` (`id`, `recipe_id`, `step_number`, `step_description`, `step_image`)
+- `recipe_likes` (`id`, `recipe_id`, `user_id`, `created_at`)
+- `recipe_comments` (`id`, `recipe_id`, `user_id`, `comment_text`, `created_at`)
+
+Relationships:
+
+- One-to-many: `user` → `recipe`
+- One-to-many: `recipe` → `recipe_ingredients`, `recipe_steps`, `recipe_comments`
+- Many-to-many (logical): `user` ↔ `recipe` through `recipe_likes`
+
+If you need, we can generate a SQL schema and seed data matching this codebase.
+
+## Testing Checklist
+
+| Area     | Test                                                                 |
+|----------|----------------------------------------------------------------------|
+| Auth     | Register/login/logout with valid/invalid credentials                 |
+| Profile  | Update name, about, and avatar; changes persist                      |
+| CRUD     | Create/edit/delete recipe with images, ingredients, steps            |
+| Likes    | Like/unlike updates the count and UI                                 |
+| Comments | Add/delete comments; correct attribution and timestamps              |
+| Search   | Search by title/tags; pagination returns correct pages               |
+| UI       | Responsive layout; accessible controls and color contrast            |
+| Errors   | DB failures logged; user sees friendly error page                    |
+
+## Deployment
+
+- Local: XAMPP (Apache + MySQL) — place under `htdocs` and configure `.env`
+- Production: any PHP hosting with MySQL — configure virtual host and `.env`
+- Ensure `public/uploads/` is writable by the web server
+- Enforce HTTPS and secure session settings in production
+
+## License and Usage
+
+For educational/demo use. Add a license file if you plan to open-source.
+
+## Acknowledgements
+
+- Tailwind CSS (CDN) for fast UI development
+- PHP and MySQL documentation
+- Community resources and tutorials that inspired this build

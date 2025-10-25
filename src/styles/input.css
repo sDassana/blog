@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global theme tokens */
+:root {
+  --accent: #ff6347; /* tomato */
+  --cream: #FAF7F2;  /* navbar/soft bg */
+}
+
+/* Global rounding overrides to 20px to match current design */
+/* Mirrors the inline style previously in topbar.php */
+.rounded, .rounded-sm, .rounded-md, .rounded-lg, .rounded-xl,
+.rounded-2xl, .rounded-3xl,
+.rounded-\[10px\], .rounded-\[12px\], .rounded-\[15px\], .rounded-\[16px\], .rounded-\[18px\] {
+  border-radius: 20px !important;
+}
+
+input, select, textarea {
+  border-radius: 20px;
+}
+
+.card, .panel { border-radius: 20px; }
+
+.btn, button { border-radius: 20px; }

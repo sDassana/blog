@@ -12,8 +12,9 @@ unset($_SESSION['login_errors'], $_SESSION['old_email']);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Login · The Cookie Lovestoblog</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <title>Login · The Cookie Lovestoblog</title>
+  <link rel="stylesheet" href="/blog/public/css/app.css" />
+    
   </head>
   <body class="min-h-screen bg-white text-gray-800">
     <?php include __DIR__ . '/partials/topbar.php'; ?>

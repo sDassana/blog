@@ -19,26 +19,44 @@ if ($owner != $_SESSION['user_id']) {
     exit;
 }
 
+// Ensure description column exists (best-effort, ignore errors on unsupported versions)
+try {
+    $pdo->exec("ALTER TABLE recipe ADD COLUMN IF NOT EXISTS description TEXT NULL AFTER title");
+} catch (Exception $e) {
+    // ignore
+}
+
 // Update main details
 $title = $_POST['title'];
 $category = $_POST['category'];
 $tags = $_POST['tags'];
+$description = trim($_POST['description'] ?? '');
+
+// Best-effort: ensure category column can accept the updated option set
+try {
+    $pdo->exec("ALTER TABLE recipe MODIFY category VARCHAR(100) NOT NULL");
+} catch (Exception $e) {
+    // ignore if already compatible
+}
 
 $mainImagePath = null;
 if (!empty($_FILES['image_main']['name'])) {
     $uploadDir = __DIR__ . '/../../public/uploads/';
     if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
     $fileTmp = $_FILES['image_main']['tmp_name'];
-    $fileName = uniqid('recipe_') . '.' . pathinfo($_FILES['image_main']['name'], PATHINFO_EXTENSION);
-    $fileType = mime_content_type($fileTmp);
-    if (in_array($fileType, ['image/jpeg','image/png','image/webp'])) {
-        move_uploaded_file($fileTmp, $uploadDir . $fileName);
-        $mainImagePath = 'uploads/' . $fileName;
+    $fileType = @mime_content_type($fileTmp);
+    $allowed = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp'];
+    if ($fileType && isset($allowed[$fileType])) {
+        $ext = $allowed[$fileType];
+        $fileName = uniqid('recipe_', true) . '.' . $ext;
+        if (@move_uploaded_file($fileTmp, $uploadDir . $fileName)) {
+            $mainImagePath = 'uploads/' . $fileName;
+        }
     }
 }
 
-$query = "UPDATE recipe SET title=:t, category=:c, tags=:tag";
-$params = ['t'=>$title, 'c'=>$category, 'tag'=>$tags, 'id'=>$recipe_id];
+$query = "UPDATE recipe SET title=:t, description=:d, category=:c, tags=:tag";
+$params = ['t'=>$title, 'd'=>$description, 'c'=>$category, 'tag'=>$tags, 'id'=>$recipe_id];
 if ($mainImagePath) {
     $query .= ", image_main=:img";
     $params['img'] = $mainImagePath;
@@ -77,14 +95,15 @@ foreach ($stepDesc as $i=>$desc) {
     // Check if a new file was uploaded for this step index
     if (!empty($stepImages['name'][$i])) {
         $fileTmp = $stepImages['tmp_name'][$i];
-        $fileName = uniqid('step_') . '.' . pathinfo($stepImages['name'][$i], PATHINFO_EXTENSION);
-        $fileType = mime_content_type($fileTmp);
-        
-        // Handle the new file upload
-        if (in_array($fileType, ['image/jpeg','image/png','image/webp'])) {
+        $fileType = @mime_content_type($fileTmp);
+        $allowed = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp'];
+        if ($fileType && isset($allowed[$fileType])) {
+            $ext = $allowed[$fileType];
+            $fileName = uniqid('step_', true) . '.' . $ext;
             // Note: You should ideally delete the OLD file from the filesystem here if it exists!
-            move_uploaded_file($fileTmp, $uploadDir . $fileName);
-            $imgPath = 'uploads/' . $fileName;
+            if (@move_uploaded_file($fileTmp, $uploadDir . $fileName)) {
+                $imgPath = 'uploads/' . $fileName;
+            }
         }
     } else {
         // If NO new file, check for an existing image path at this index
