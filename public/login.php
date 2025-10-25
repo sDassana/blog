@@ -42,7 +42,7 @@ unset($_SESSION['login_errors'], $_SESSION['old_email']);
           </div>
         <?php endif; ?>
 
-        <form action="../src/controllers/login.php" method="POST" novalidate class="space-y-4">
+  <form action="../src/controllers/auth/login.php" method="POST" novalidate class="space-y-4">
           <div>
             <label for="email" class="block text-sm text-gray-600 mb-1">Email</label>
             <input id="email" type="email" name="email" value="<?php echo htmlspecialchars($old_email, ENT_QUOTES, 'UTF-8'); ?>" autocomplete="email" required placeholder="you@example.com" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]" />
@@ -50,7 +50,14 @@ unset($_SESSION['login_errors'], $_SESSION['old_email']);
 
           <div>
             <label for="password" class="block text-sm text-gray-600 mb-1">Password</label>
-            <input id="password" type="password" name="password" autocomplete="current-password" required placeholder="••••••••" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]" />
+            <div>
+              <input id="password" type="password" name="password" autocomplete="current-password" required placeholder="••••••••" class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]" />
+            </div>
+            <div class="mt-1 relative">
+              <button type="button" id="toggle-password" aria-label="Show password" class="absolute top-0 right-0 mr-px h-7 w-7 flex items-center justify-center text-gray-500 hover:text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+              </button>
+            </div>
           </div>
 
           <p class="text-center text-sm">
@@ -71,4 +78,18 @@ unset($_SESSION['login_errors'], $_SESSION['old_email']);
 
     <?php include __DIR__ . '/partials/footer.php'; ?>
   </body>
+  <script>
+    (function() {
+      // Password visibility toggle
+      const toggleBtn = document.getElementById('toggle-password');
+      const pwInput = document.getElementById('password');
+      if (toggleBtn && pwInput) {
+        toggleBtn.addEventListener('click', () => {
+          const show = pwInput.type === 'password';
+          pwInput.type = show ? 'text' : 'password';
+          toggleBtn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+        });
+      }
+    })();
+  </script>
 </html>

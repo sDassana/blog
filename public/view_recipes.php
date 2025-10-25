@@ -2,6 +2,25 @@
 session_start();
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../src/helpers/flash.php';
+
+/**
+ * Simple Markdown parser for basic formatting
+ * Supports: **bold**, *italic*, __bold__, _italic_
+ */
+function parseSimpleMarkdown($text) {
+    // Escape HTML first
+    $text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+    
+    // Bold: **text** or __text__
+    $text = preg_replace('/\*\*(.+?)\*\*/', '<strong>$1</strong>', $text);
+    $text = preg_replace('/__(.+?)__/', '<strong>$1</strong>', $text);
+    
+    // Italic: *text* or _text_ (but not __ which is bold)
+    $text = preg_replace('/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/', '<em>$1</em>', $text);
+    $text = preg_replace('/(?<!_)_(?!_)(.+?)(?<!_)_(?!_)/', '<em>$1</em>', $text);
+    
+    return $text;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -118,14 +137,14 @@ require_once __DIR__ . '/../src/helpers/flash.php';
                                                         $fuser = htmlspecialchars($featured['username'], ENT_QUOTES, 'UTF-8');
                                                         $fcat = htmlspecialchars($featured['category'], ENT_QUOTES, 'UTF-8');
                                                         $flikes = (int)$featured['likes'];
-                                                        // Fetch first step as description preview
+                                                        // Fetch recipe description
                                                         $fdesc = '';
                                                         try {
-                                                            $s = $pdo->prepare("SELECT step_description FROM recipe_steps WHERE recipe_id = :rid ORDER BY step_number ASC LIMIT 1");
+                                                            $s = $pdo->prepare("SELECT description FROM recipe WHERE id = :rid");
                                                             $s->execute(['rid' => $fid]);
                                                             $row = $s->fetch(PDO::FETCH_ASSOC);
-                                                            if ($row && !empty($row['step_description'])) {
-                                                                $fdesc = trim($row['step_description']);
+                                                            if ($row && !empty($row['description'])) {
+                                                                $fdesc = trim($row['description']);
                                                                 if (mb_strlen($fdesc) > 220) { $fdesc = mb_substr($fdesc, 0, 220) . '…'; }
                                                             }
                                                         } catch (Exception $e) { /* ignore */ }
@@ -144,7 +163,7 @@ require_once __DIR__ . '/../src/helpers/flash.php';
                                                                             <p class="text-sm text-gray-600 mt-1">By <?= $fuser ?></p>
                                                                             <p class="text-xs text-[#ff6347] mt-1"><em><?= $fcat ?></em></p>
                                                                             <?php if ($fdesc !== ''): ?>
-                                                                                <p class="text-sm text-gray-700 mt-3"><?= nl2br(htmlspecialchars($fdesc, ENT_QUOTES, 'UTF-8')) ?></p>
+                                                                                <p class="text-sm text-gray-700 mt-3"><?= nl2br(parseSimpleMarkdown($fdesc)) ?></p>
                                                                             <?php else: ?>
                                                                                 <p class="text-sm text-gray-500 mt-3">No description available.</p>
                                                                             <?php endif; ?>
@@ -244,7 +263,8 @@ require_once __DIR__ . '/../src/helpers/flash.php';
                                                         $title = htmlspecialchars($r['title'], ENT_QUOTES, 'UTF-8');
                                                         $desc = isset($r['description']) ? trim($r['description']) : '';
                                                         if ($desc !== '') {
-                                                            $desc = htmlspecialchars(mb_strimwidth($desc, 0, 120, '…', 'UTF-8'), ENT_QUOTES, 'UTF-8');
+                                                            $truncated = mb_strimwidth($desc, 0, 120, '…', 'UTF-8');
+                                                            $desc = parseSimpleMarkdown($truncated);
                                                         }
                                                         $user = htmlspecialchars($r['username'], ENT_QUOTES, 'UTF-8');
                                                         $cat = htmlspecialchars($r['category'], ENT_QUOTES, 'UTF-8');

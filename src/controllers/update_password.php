@@ -14,8 +14,10 @@ $currentPassword = $_POST['current_password'] ?? '';
 $newPassword = $_POST['new_password'] ?? '';
 $confirmPassword = $_POST['confirm_password'] ?? '';
 
-if (strlen($newPassword) < 8) {
-    setFlash('error', 'New password must be at least 8 characters.');
+// Strong password policy: 8+ chars, upper, lower, digit, symbol
+$strongPattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/';
+if (!preg_match($strongPattern, $newPassword)) {
+    setFlash('error', 'New password must be at least 8 characters and include uppercase, lowercase, a number, and a symbol.');
     header('Location: /blog/public/dashboard.php');
     exit;
 }

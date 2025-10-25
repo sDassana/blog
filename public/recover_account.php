@@ -1,20 +1,22 @@
 <?php
 session_start();
 require_once __DIR__ . '/../src/helpers/flash.php';
+
+// You can allow recovery without being logged in; this page is for locked-out users.
 ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Reset Password · The Cookie Lovestoblog</title>
+    <title>Recover Account · The Cookie Lovestoblog</title>
     <link rel="stylesheet" href="/blog/public/css/app.css" />
   </head>
   <body class="min-h-screen bg-white text-gray-800">
     <?php include __DIR__ . '/partials/topbar.php'; ?>
-    <main class="w-full max-w-xl mx-auto mt-10 mb-20 bg-white border border-gray-200 rounded-xl shadow-md" role="main" aria-labelledby="reset-title">
+    <main class="w-full max-w-xl mx-auto mt-10 mb-20 bg-white border border-gray-200 rounded-xl shadow-md" role="main" aria-labelledby="recover-title">
       <div class="px-6 py-5 border-b border-gray-200 bg-white rounded-t-xl">
-        <h1 id="reset-title" class="text-xl font-bold tracking-tight">Reset your password</h1>
+        <h1 id="recover-title" class="text-xl font-bold tracking-tight">Recover your account</h1>
         <p class="text-sm text-gray-500">Enter your email, your five recovery words in order, and a new password.</p>
       </div>
       <div class="p-6">
@@ -110,7 +112,7 @@ require_once __DIR__ . '/../src/helpers/flash.php';
         const match = pw.value === cpw.value;
         msg.classList.remove('hidden');
         msg.textContent = match ? (strong ? 'Passwords match.' : 'Passwords match but are not strong enough.') : 'Passwords do not match.';
-        msg.className = 'text-xs ' + (match && strong ? 'text-green-600' : 'text-red-600');
+        msg.className = 'mt-1 text-xs ' + (match && strong ? 'text-green-600' : 'text-red-600');
         if (!bothFilled) msg.classList.add('hidden');
       }
       if (pw && cpw) {
@@ -119,4 +121,10 @@ require_once __DIR__ . '/../src/helpers/flash.php';
       }
     })();
   </script>
-  </html>
+</html>
+          if (!bothFilled) nmsg.classList.add('hidden');
+        }
+        if (npw && ncf) { npw.addEventListener('input', updateMatch); ncf.addEventListener('input', updateMatch); }
+      })();
+    </script>
+    </html>

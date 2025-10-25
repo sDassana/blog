@@ -67,7 +67,7 @@ $email = $user['email'] ?? '';
               <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5 text-[#ff6347]"><path d="M11.484 3.25a8.25 8.25 0 108.266 8.745.75.75 0 10-1.494-.14 6.75 6.75 0 11-6.772-7.145.75.75 0 10-.25-1.46z"/><path d="M12 8.25a.75.75 0 01.75.75v.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 3a.75.75 0 01.75.75v3a.75.75 0 01-1.5 0v-3A.75.75 0 0112 11.25z"/></svg>
               <span>About Us</span>
             </a>
-            <a href="../src/controllers/logout.php" class="flex items-center gap-2 px-3 py-2 rounded-[15px] hover:bg-[#ff6347]/10">
+            <a href="../src/controllers/auth/logout.php" class="flex items-center gap-2 px-3 py-2 rounded-[15px] hover:bg-[#ff6347]/10">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-[#ff6347]"><path fill-rule="evenodd" d="M3.75 4.5A2.25 2.25 0 016 2.25h5.25a.75.75 0 010 1.5H6a.75.75 0 00-.75.75v15a.75.75 0 00.75.75h5.25a.75.75 0 010 1.5H6A2.25 2.25 0 013.75 20.25v-15zm14.47 6.53a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H10.5a.75.75 0 000 1.5h5.38l-1.72 1.72a.75.75 0 001.06 1.06l3-3z" clip-rule="evenodd"/></svg>
               <span>Logout</span>
             </a>
@@ -283,15 +283,44 @@ $email = $user['email'] ?? '';
             <form id="form-password" action="../src/controllers/update_password.php" method="POST" class="space-y-4 hidden">
               <div>
                 <label class="block text-sm text-gray-600 mb-1">Current Password</label>
-                <input type="password" name="current_password" required class="w-full rounded-[15px] border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]" />
+                <div>
+                  <input id="cp-current" type="password" name="current_password" required class="w-full rounded-[15px] border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]" />
+                </div>
+                <div class="mt-1 relative">
+                  <button type="button" id="toggle-cp-current" aria-label="Show password" class="absolute top-0 right-0 mr-px h-7 w-7 flex items-center justify-center text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                  </button>
+                </div>
               </div>
               <div>
                 <label class="block text-sm text-gray-600 mb-1">New Password</label>
-                <input type="password" name="new_password" required class="w-full rounded-[15px] border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]" />
+                <div>
+                  <input id="cp-new" type="password" name="new_password" required
+                         pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$"
+                         title="At least 8 chars with upper, lower, number, and symbol"
+                         class="w-full rounded-[15px] border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]" />
+                </div>
+                <div class="mt-1 relative">
+                  <p class="text-xs text-gray-500">Use at least 8 characters including upper & lower case, a number, and a symbol.</p>
+                  <button type="button" id="toggle-cp-new" aria-label="Show password" class="absolute top-0 right-0 mr-px h-7 w-7 flex items-center justify-center text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                  </button>
+                </div>
               </div>
               <div>
                 <label class="block text-sm text-gray-600 mb-1">Confirm New Password</label>
-                <input type="password" name="confirm_password" required class="w-full rounded-[15px] border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]" />
+                <div>
+                  <input id="cp-confirm" type="password" name="confirm_password" required
+                         pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$"
+                         title="Must match and meet strength rules"
+                         class="w-full rounded-[15px] border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]" />
+                </div>
+                <div class="mt-1 relative">
+                  <p id="cp-match-msg" class="text-xs hidden">Passwords match.</p>
+                  <button type="button" id="toggle-cp-confirm" aria-label="Show password" class="absolute top-0 right-0 mr-px h-7 w-7 flex items-center justify-center text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                  </button>
+                </div>
               </div>
               <div>
                 <button type="submit" class="inline-flex items-center rounded-[15px] bg-[#ff6347] text-white px-4 py-2 font-semibold hover:bg-[#e5573e]">Update Password</button>
@@ -462,6 +491,37 @@ $email = $user['email'] ?? '';
         document.getElementById('my-recipes')?.scrollIntoView({behavior: 'smooth'});
       });
       if (btnSaved) btnSaved.addEventListener('click', showSaved);
+
+          // Password field toggles and match feedback for Change Password form
+          function wireToggle(btnId, inputId) {
+            const b = document.getElementById(btnId);
+            const i = document.getElementById(inputId);
+            if (!b || !i) return;
+            b.addEventListener('click', () => {
+              i.type = i.type === 'password' ? 'text' : 'password';
+            });
+          }
+          wireToggle('toggle-cp-current', 'cp-current');
+          wireToggle('toggle-cp-new', 'cp-new');
+          wireToggle('toggle-cp-confirm', 'cp-confirm');
+
+          const npw = document.getElementById('cp-new');
+          const ncf = document.getElementById('cp-confirm');
+          const nmsg = document.getElementById('cp-match-msg');
+          function updateCpMatch() {
+            if (!npw || !ncf || !nmsg) return;
+            const bothFilled = npw.value.length > 0 && ncf.value.length > 0;
+            const strong = npw.checkValidity();
+            const match = npw.value === ncf.value;
+            nmsg.classList.remove('hidden');
+            nmsg.textContent = match ? (strong ? 'Passwords match.' : 'Passwords match but are not strong enough.') : 'Passwords do not match.';
+            nmsg.className = 'mt-1 text-xs ' + (match && strong ? 'text-green-600' : 'text-red-600');
+            if (!bothFilled) nmsg.classList.add('hidden');
+          }
+          if (npw && ncf) {
+            npw.addEventListener('input', updateCpMatch);
+            ncf.addEventListener('input', updateCpMatch);
+          }
     </script>
   </body>
 </html>

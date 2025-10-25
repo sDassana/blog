@@ -20,3 +20,35 @@ function pick_random_words(int $n = 5): array {
     }
     return $out;
 }
+
+/**
+ * Normalize user-provided recovery words: trim, lowercase, and allow a–z only.
+ * Returns exactly 5 words; throws InvalidArgumentException on validation errors.
+ */
+function normalize_recovery_words(array $words): array {
+    $norm = [];
+    foreach ($words as $w) {
+        $w = strtolower(trim((string)$w));
+        // keep letters only
+        $w = preg_replace('/[^a-z]/', '', $w);
+        if ($w === '' || strlen($w) < 2 || strlen($w) > 32) {
+            throw new InvalidArgumentException('Each recovery word must be 2–32 letters.');
+        }
+        $norm[] = $w;
+    }
+    if (count($norm) !== 5) {
+        throw new InvalidArgumentException('Exactly 5 recovery words are required.');
+    }
+    return $norm;
+}
+
+/**
+ * Hash recovery words using password_hash() for per-word verification later.
+ */
+function hash_recovery_words(array $words): array {
+    $hashes = [];
+    foreach ($words as $w) {
+        $hashes[] = password_hash($w, PASSWORD_DEFAULT);
+    }
+    return $hashes; // length 5
+}
