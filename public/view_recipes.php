@@ -25,6 +25,9 @@ function parseSimpleMarkdown($text) {
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>All Recipes · The Cookie Lovestoblog</title>
@@ -84,8 +87,8 @@ function parseSimpleMarkdown($text) {
                                         <!-- Centered quote content -->
                                         <div class="flex-1 flex items-center justify-center">
                                             <div class="px-6 text-center max-w-4xl mx-auto">
-                                                <p class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold leading-tight" style="font-family: 'Comic Sans MS','Comic Sans','Comic Neue',cursive; font-size: clamp(3rem, 8vw, 9rem); line-height: 1.05; padding-bottom: 20px; padding-top: 20px;">
-                                                    “<?= htmlspecialchars($heroQuote, ENT_QUOTES, 'UTF-8') ?>”
+                                                <p class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold leading-tight" style="font-family: 'Dancing Script', cursive; font-size: clamp(3rem, 8vw, 9rem); line-height: 1.05; padding-bottom: 20px; padding-top: 20px;">
+                                                    "<?= htmlspecialchars($heroQuote, ENT_QUOTES, 'UTF-8') ?>"
                                                 </p>
                                             </div>
                                         </div>
@@ -177,7 +180,7 @@ function parseSimpleMarkdown($text) {
                                                                 </div>
                                                             </div>
                                                             <div class="rounded-[15px]  bg-white p-4 md:p-6 flex items-center justify-center">
-                                                                <p class="text-3xl md:text-4xl lg:text-5xl text-gray-800 text-center leading-relaxed font-extrabold" style="font-family: 'Comic Sans MS','Comic Sans','Comic Neue',cursive;font-size: clamp(3rem, 5vw, 9rem); line-height: 1.05;">“<?= htmlspecialchars($sideQuote, ENT_QUOTES, 'UTF-8') ?>”</p>
+                                                                <p class="text-3xl md:text-4xl lg:text-5xl text-gray-800 text-center leading-relaxed font-extrabold" style="font-family: 'Dancing Script', cursive; font-size: clamp(3rem, 5vw, 9rem); line-height: 1.05;">"<?= htmlspecialchars($sideQuote, ENT_QUOTES, 'UTF-8') ?>"</p>
                                                             </div>
                                                         </div>
                                                     </section>
