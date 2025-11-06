@@ -26,7 +26,8 @@ if (!$owner) {
     exit;
 }
 
-if ($owner != $_SESSION['user_id']) {
+// Allow delete if owner or admin role
+if ($owner != $_SESSION['user_id'] && (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin')) {
     setFlash('error', 'You cannot delete this recipe.');
     header('Location: /blog/public/view_recipes.php');
     exit;

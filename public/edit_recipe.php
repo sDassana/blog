@@ -12,10 +12,11 @@ $recipe = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$recipe) { echo "Recipe not found."; exit; }
 
-// Ownership check
-if ($_SESSION['user_id'] != $recipe['user_id']) {
-    echo "Unauthorized.";
-    exit;
+// Ownership or admin check
+$isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+if ($_SESSION['user_id'] != $recipe['user_id'] && !$isAdmin) {
+  echo "Unauthorized.";
+  exit;
 }
 
 // Fetch ingredients and steps
