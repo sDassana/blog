@@ -1,8 +1,4 @@
-<?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-?>
+<?php // topbar assumes session already started via config include ?>
 
 <!-- Global styles moved to /public/css/app.css via Tailwind build -->
 

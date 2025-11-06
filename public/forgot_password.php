@@ -1,6 +1,5 @@
 <?php
-session_start();
-require_once __DIR__ . '/../src/helpers/flash.php';
+require_once __DIR__ . '/../config/config.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">

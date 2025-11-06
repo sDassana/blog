@@ -1,9 +1,6 @@
 <?php
 // src/controllers/auth/register.php
-
-session_start();
 require_once __DIR__ . '/../../../config/config.php'; // Load $pdo and env()
-require_once __DIR__ . '/../../helpers/flash.php';
 require_once __DIR__ . '/../../helpers/recovery_words.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

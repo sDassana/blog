@@ -1,6 +1,5 @@
 <?php
 // src/controllers/auth/login.php
-session_start();
 require_once __DIR__ . '/../../../config/config.php';
 
 // Always use the themed public login page for GET requests

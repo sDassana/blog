@@ -1,6 +1,6 @@
 <?php
 // src/controllers/auth/logout.php
-session_start();
+require_once __DIR__ . '/../../../config/config.php';
 session_unset();  // Remove all session variables
 session_destroy(); // End the session
 

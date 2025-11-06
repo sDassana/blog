@@ -75,3 +75,8 @@ try {
     // Stop execution
     exit;
 }   
+
+// Start a secure session for all requests (idempotent)
+require_once __DIR__ . '/../src/helpers/session.php';
+require_once __DIR__ . '/../src/helpers/flash.php';
+start_secure_session();

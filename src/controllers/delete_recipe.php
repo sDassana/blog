@@ -1,7 +1,5 @@
 <?php
-session_start();
 require_once __DIR__ . '/../../config/config.php';
-require_once __DIR__ . '/../helpers/flash.php';
 
 
 if (!isset($_SESSION['user_id'])) {

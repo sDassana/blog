@@ -1,6 +1,5 @@
 <?php
-session_start();
-require_once __DIR__ . '/../src/helpers/flash.php';
+require_once __DIR__ . '/../config/config.php';
 $errors = $_SESSION['login_errors'] ?? [];
 $old_email = $_SESSION['old_email'] ?? '';
 $success = getFlash('success');

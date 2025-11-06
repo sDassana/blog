@@ -1,6 +1,5 @@
 <?php
-session_start();
-require_once __DIR__ . '/../src/helpers/flash.php';
+require_once __DIR__ . '/../config/config.php';
 
 // You can allow recovery without being logged in; this page is for locked-out users.
 ?>

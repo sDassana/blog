@@ -1,8 +1,6 @@
 <?php
 // src/controllers/auth/set_recovery_words.php
-session_start();
 require_once __DIR__ . '/../../../config/config.php';
-require_once __DIR__ . '/../../helpers/flash.php';
 require_once __DIR__ . '/../../helpers/recovery_words.php';
 
 if (!isset($_SESSION['user_id'])) {

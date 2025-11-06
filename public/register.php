@@ -1,5 +1,5 @@
 <?php
-  session_start();
+  require_once __DIR__ . '/../config/config.php';
   require_once __DIR__ . '/../src/helpers/recovery_words.php';
   $regErrors = $_SESSION['register_errors'] ?? [];
   $old = $_SESSION['register_old'] ?? ['username' => '', 'email' => ''];
