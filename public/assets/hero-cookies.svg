@@ -1,69 +1,188 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
-  <!-- Transparent background -->
+  <!-- Original, custom-drawn doodles inspired by a bold-outline + teal-accent style. No text, center kept clear. -->
   <defs>
     <style>
-      /* Slightly darker and thicker for better visibility */
-      .cookie { fill: none; stroke: #d1d5db; stroke-width: 5; opacity: 0.75; }
-      .chip { fill: #d1d5db; opacity: 0.5; }
-      .utensil { fill: none; stroke: #d1d5db; stroke-width: 4; opacity: 0.65; stroke-linecap: round; }
+      .line { fill: none; stroke: #111827; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+      .thin { fill: none; stroke: #111827; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; }
+      .accent { fill: #2dd4bf; }
+      .dot { fill: #2dd4bf; }
+      .seed { fill: #111827; }
     </style>
-    <!-- Cookie donut symbol -->
-    <g id="donut">
-      <circle class="cookie" cx="0" cy="0" r="70" />
-      <circle class="cookie" cx="0" cy="0" r="35" />
-      <circle class="chip" cx="20" cy="-10" r="6" />
-      <circle class="chip" cx="-25" cy="5" r="7" />
-      <circle class="chip" cx="10" cy="30" r="5" />
-      <circle class="chip" cx="-5" cy="-28" r="5" />
+
+    <!-- Symbols -->
+    <!-- Pizza slice -->
+    <g id="pizza">
+      <path class="line" d="M-140,-10 C-40,-70 40,-70 140,-10 L0,230 Z"/>
+      <path class="line" d="M-115,-15 C-35,-55 35,-55 115,-15"/>
+      <circle class="accent" cx="-55" cy="50" r="16"/>
+      <circle class="accent" cx="45" cy="90" r="14"/>
+      <circle class="accent" cx="-5" cy="140" r="12"/>
     </g>
-    <!-- Simple bread slice symbol -->
-    <g id="bread">
-      <path class="cookie" d="M-55,20 h110 v60 a15,15 0 0 1 -15,15 h-80 a15,15 0 0 1 -15,-15 z"/>
-      <path class="cookie" d="M-55,20 v-10 a40,32 0 0 1 40,-28 h30 a40,32 0 0 1 40,28 v10"/>
-      <circle class="chip" cx="-15" cy="55" r="5"/>
-      <circle class="chip" cx="10" cy="65" r="4"/>
-      <circle class="chip" cx="25" cy="50" r="5"/>
+
+    <!-- Burger -->
+    <g id="burger">
+      <path class="line" d="M-150,0 a150,90 0 0 1 300,0"/>
+      <path class="line" d="M-160,35 h320"/>
+      <path class="line" d="M-150,80 a150,80 0 0 0 300,0"/>
+      <path class="line" d="M-140,50 c40,25 60,-25 120,0 c60,25 80,-25 140,0"/>
+      <circle class="seed" cx="-70" cy="-20" r="4"/>
+      <circle class="seed" cx="0" cy="-35" r="4"/>
+      <circle class="seed" cx="70" cy="-15" r="4"/>
+      <path class="accent" d="M-150,35 h300 v15 a10,10 0 0 1 -10,10 h-280 a10,10 0 0 1 -10,-10z"/>
     </g>
-    <!-- Spoon symbol -->
-    <g id="spoon">
-      <ellipse class="cookie" cx="0" cy="0" rx="26" ry="18"/>
-      <path class="utensil" d="M20,10 C80,60 110,95 125,120"/>
+
+    <!-- Carrot -->
+    <g id="carrot">
+      <path class="line" d="M0,0 l120,60 -140,200 -40,-20 z"/>
+      <path class="thin" d="M10,30 l100,50"/>
+      <path class="thin" d="M-5,55 l95,47"/>
+      <path class="line" d="M-60,-10 c-40,-40 -70,-40 -100,-50"/>
+      <path class="line" d="M-55,-20 c-15,-30 -25,-40 -40,-60"/>
+      <circle class="accent" cx="-80" cy="-20" r="10"/>
+    </g>
+
+    <!-- Drink with straw -->
+    <g id="drink">
+      <path class="line" d="M-80,-15 h160 l-30,230 a20,20 0 0 1 -20,17 h-60 a20,20 0 0 1 -20,-17 z"/>
+      <path class="line" d="M-60,-15 l25,-45 h70"/>
+      <path class="accent" d="M-65,60 h130 l-18,120 a14,14 0 0 1 -14,12 h-66 a14,14 0 0 1 -14,-12z"/>
+      <path class="line" d="M-20,40 c20,18 35,18 55,0"/>
+      <path class="line" d="M-35,95 c24,12 46,12 70,0"/>
+      <path class="line" d="M-30,135 c22,10 44,10 66,0"/>
+    </g>
+
+    <!-- Hotdog -->
+    <g id="hotdog">
+      <path class="line" d="M-170,0 a170,70 0 0 1 340,0 a170,70 0 0 1 -340,0"/>
+      <path class="line" d="M-155,-20 a155,50 0 0 1 310,0 a155,50 0 0 1 -310,0"/>
+      <path class="accent" d="M-150,-5 a150,45 0 0 1 300,0 a150,45 0 0 1 -300,0"/>
+      <path class="line" d="M-120,10 c40,40 80,-40 120,0 c40,40 80,-40 120,0"/>
+    </g>
+
+    <!-- Noodles bowl -->
+    <g id="noodles">
+      <path class="line" d="M-160,0 h320 l-20,60 a160,80 0 0 1 -280,0 z"/>
+      <path class="thin" d="M-120,-40 c40,0 40,40 80,40 c40,0 40,-40 80,-40 c40,0 40,40 80,40"/>
+      <path class="thin" d="M-140,-20 c40,0 40,40 80,40 c40,0 40,-40 80,-40 c40,0 40,40 80,40"/>
+      <circle class="accent" cx="-40" cy="10" r="10"/>
+      <circle class="accent" cx="40" cy="5" r="10"/>
+    </g>
+
+    <!-- Lemon slice -->
+    <g id="lemon">
+      <circle class="line" cx="0" cy="0" r="70"/>
+      <circle class="thin" cx="0" cy="0" r="55"/>
+      <path class="thin" d="M0,-55 V55"/>
+      <path class="thin" d="M-48,-28 L48,28"/>
+      <path class="thin" d="M-48,28 L48,-28"/>
+      <path class="thin" d="M-55,0 H55"/>
+    </g>
+
+    <!-- Donut ring -->
+    <g id="donutNew">
+      <circle class="line" cx="0" cy="0" r="60"/>
+      <circle class="line" cx="0" cy="0" r="28"/>
+      <circle class="accent" cx="-18" cy="-12" r="6"/>
+      <circle class="accent" cx="22" cy="6" r="6"/>
+      <circle class="accent" cx="-5" cy="24" r="5"/>
+    </g>
+
+    <!-- Broccoli-ish -->
+    <g id="broccoli">
+      <path class="line" d="M-40,50 c-20,-60 20,-90 60,-70 c20,-40 80,-40 95,10 c40,-10 70,35 45,70 c15,45 -35,65 -70,45 c-25,30 -85,15 -85,-20"/>
+      <path class="line" d="M10,50 c0,80 -5,120 -15,170"/>
+      <circle class="accent" cx="20" cy="15" r="10"/>
+      <circle class="accent" cx="70" cy="5" r="8"/>
+    </g>
+
+    <!-- Candy -->
+    <g id="candy">
+      <ellipse class="line" cx="0" cy="0" rx="30" ry="18"/>
+      <path class="line" d="M-30,0 l-25,-15 m0,30 l25,-15"/>
+      <path class="line" d="M30,0 l25,-15 m0,30 l-25,-15"/>
+      <ellipse class="accent" cx="0" cy="0" rx="18" ry="10"/>
+    </g>
+
+    <!-- Leaf -->
+    <g id="leaf">
+      <path class="line" d="M0,0 c60,-40 110,30 70,80 c-40,50 -110,20 -110,-40 z"/>
+      <path class="thin" d="M-10,20 c40,10 65,15 100,0"/>
     </g>
   </defs>
 
-  <!-- Place motifs around edges; leave center uncluttered (center ~ 40% width/height) -->
-  <!-- Top-left cluster -->
-  <use href="#donut" x="130" y="120"/>
-  <use href="#bread" x="300" y="100" transform="rotate(-8 300 100) scale(0.9)"/>
-  <use href="#spoon" x="220" y="220" transform="rotate(35 220 220)"/>
+  <!-- Composition: keep center clear (roughly x 480..1120, y 200..700) to mimic a text-free focal area -->
+  <!-- Top-left corner cluster -->
+  <g transform="translate(140,130) rotate(-8)">
+    <use href="#pizza"/>
+  </g>
+  <g transform="translate(320,180) rotate(12)">
+    <use href="#lemon"/>
+  </g>
+  <g transform="translate(230,290) rotate(22)">
+    <use href="#leaf"/>
+  </g>
 
-  <!-- Top-right cluster -->
-  <use href="#donut" x="1470" y="130"/>
-  <use href="#bread" x="1320" y="90" transform="rotate(12 1320 90)"/>
-  <use href="#spoon" x="1400" y="240" transform="rotate(-25 1400 240)"/>
+  <!-- Top-right corner cluster -->
+  <g transform="translate(1460,140) rotate(10)">
+    <use href="#noodles"/>
+  </g>
+  <g transform="translate(1280,120) rotate(-6)">
+    <use href="#donutNew"/>
+  </g>
+  <g transform="translate(1390,300) rotate(-18)">
+    <use href="#candy"/>
+  </g>
 
-  <!-- Bottom-left cluster -->
-  <use href="#donut" x="180" y="780"/>
-  <use href="#bread" x="340" y="760" transform="rotate(6 340 760)"/>
-  <use href="#spoon" x="260" y="620" transform="rotate(155 260 620)"/>
+  <!-- Right side: burger and carrot -->
+  <g transform="translate(1440,520) rotate(-6)">
+    <use href="#burger"/>
+  </g>
+  <g transform="translate(1320,720) rotate(190)">
+    <use href="#carrot"/>
+  </g>
 
-  <!-- Bottom-right cluster -->
-  <use href="#donut" x="1450" y="760"/>
-  <use href="#bread" x="1260" y="730" transform="rotate(-10 1260 730)"/>
-  <use href="#spoon" x="1360" y="610" transform="rotate(200 1360 610)"/>
+  <!-- Bottom-right drinks -->
+  <g transform="translate(1360,820) rotate(6)">
+    <use href="#drink"/>
+  </g>
 
-  <!-- Side fillers (avoiding center box: x 520..1080, y 250..650) -->
-  <use href="#donut" x="80" y="420" transform="scale(0.8)"/>
-  <use href="#bread" x="1520" y="460" transform="scale(0.8) rotate(90 1520 460)"/>
+  <!-- Bottom-left: hotdog, lemon, candy -->
+  <g transform="translate(180,780) rotate(8)">
+    <use href="#hotdog"/>
+  </g>
+  <g transform="translate(360,730) rotate(-10)">
+    <use href="#lemon"/>
+  </g>
+  <g transform="translate(260,610) rotate(165)">
+    <use href="#candy"/>
+  </g>
 
-  <!-- Light random chips along edges -->
-  <circle class="chip" cx="70" cy="60" r="4"/>
-  <circle class="chip" cx="1530" cy="70" r="4"/>
-  <circle class="chip" cx="70" cy="840" r="4"/>
-  <circle class="chip" cx="1530" cy="850" r="4"/>
-  <circle class="chip" cx="250" cy="30" r="3"/>
-  <circle class="chip" cx="1350" cy="30" r="3"/>
-  <circle class="chip" cx="250" cy="870" r="3"/>
-  <circle class="chip" cx="1350" cy="870" r="3"/>
+  <!-- Left side: broccoli and donut -->
+  <g transform="translate(120,460) rotate(-6)">
+    <use href="#broccoli"/>
+  </g>
+  <g transform="translate(90,300) rotate(20)">
+    <use href="#donutNew"/>
+  </g>
+
+  <!-- Light sprinkle dots (teal) around edges and lightly in the near-center perimeter -->
+  <g>
+    <circle class="dot" cx="80" cy="70" r="5"/>
+    <circle class="dot" cx="1520" cy="70" r="5"/>
+    <circle class="dot" cx="80" cy="830" r="5"/>
+    <circle class="dot" cx="1520" cy="830" r="5"/>
+    <circle class="dot" cx="260" cy="40" r="4"/>
+    <circle class="dot" cx="1340" cy="36" r="4"/>
+    <circle class="dot" cx="260" cy="860" r="4"/>
+    <circle class="dot" cx="1340" cy="864" r="4"/>
+
+    <!-- near-center perimeter, avoid exact middle -->
+    <circle class="dot" cx="520" cy="260" r="4"/>
+    <circle class="dot" cx="1080" cy="250" r="4"/>
+    <circle class="dot" cx="520" cy="640" r="4"/>
+    <circle class="dot" cx="1080" cy="650" r="4"/>
+    <circle class="dot" cx="800" cy="220" r="3"/>
+    <circle class="dot" cx="800" cy="680" r="3"/>
+  </g>
 </svg>

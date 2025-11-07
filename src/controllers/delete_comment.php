@@ -16,7 +16,8 @@ $stmt = $pdo->prepare("SELECT user_id FROM recipe_comments WHERE id = :id");
 $stmt->execute(['id' => $comment_id]);
 $owner = $stmt->fetchColumn();
 
-if ($owner != $_SESSION['user_id']) {
+$isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+if ($owner != $_SESSION['user_id'] && !$isAdmin) {
     echo json_encode(['error' => 'You can only delete your own comments']);
     exit;
 }

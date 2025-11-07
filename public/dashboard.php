@@ -18,6 +18,7 @@ try {
 
 $displayName = $user['username'] ?? ($_SESSION['username'] ?? 'User');
 $email = $user['email'] ?? '';
+$isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,6 +54,7 @@ $email = $user['email'] ?? '';
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-[#ff6347]"><path d="M3.75 5.25a.75.75 0 01.75-.75h15a.75.75 0 01.75.75v12a.75.75 0 01-.75.75h-15a.75.75 0 01-.75-.75v-12zM5 6.5v9h14v-9H5z"/></svg>
               <span>My Recipes</span>
             </button>
+            
             <button type="button" id="qa-saved" class="text-left flex items-center gap-2 px-3 py-2 rounded-[15px] hover:bg-[#ff6347]/10">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-[#ff6347]"><path d="M17.593 3.322a2.25 2.25 0 012.657 3.53l-7.5 6.25a2.25 2.25 0 01-2.9 0l-7.5-6.25A2.25 2.25 0 014.407 3.322L12 9.17l5.593-4.848z"/></svg>
               <span>Saved Recipes</span>
@@ -190,7 +192,7 @@ $email = $user['email'] ?? '';
           </div>
 
           <!-- Saved Recipes -->
-          <div id="view-saved" class="hidden h-full flex flex-col">
+          <div id="view-saved" class="hidden h-full">
             <div class="flex items-center justify-between mb-3 flex-none">
               <h2 class="text-lg font-semibold">Saved Recipes</h2>
             </div>
@@ -363,6 +365,8 @@ $email = $user['email'] ?? '';
           ?>
         </div>
       </section>
+
+      
     </main>
     <?php include __DIR__ . '/partials/footer.php'; ?>
 
@@ -453,7 +457,10 @@ $email = $user['email'] ?? '';
       }
 
       function showSaved() {
-        if (viewSaved) viewSaved.classList.remove('hidden');
+        if (viewSaved) {
+          viewSaved.classList.remove('hidden');
+          viewSaved.classList.add('flex','flex-col');
+        }
         viewNotifications.classList.add('hidden');
         viewSettingsMenu.classList.add('hidden');
         viewSettingsForm.classList.add('hidden');
@@ -489,6 +496,7 @@ $email = $user['email'] ?? '';
         document.getElementById('my-recipes')?.scrollIntoView({behavior: 'smooth'});
       });
       if (btnSaved) btnSaved.addEventListener('click', showSaved);
+      
 
           // Password field toggles and match feedback for Change Password form
           function wireToggle(btnId, inputId) {

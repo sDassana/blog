@@ -49,6 +49,8 @@ $backUrl = '/blog/public/view_recipes.php?page=' . $returnPage;
 if ($returnSearch !== '') {
     $backUrl .= '&search=' . urlencode($returnSearch);
 }
+// Determine if current user is an admin (used for UI controls / moderation)
+$isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -155,10 +157,13 @@ if ($returnSearch !== '') {
                         <?php endforeach; ?>
                     </div>
 
-                    <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $recipe['user_id']): ?>
+                    <?php if (isset($_SESSION['user_id']) && ($_SESSION['user_id'] == $recipe['user_id'] || $isAdmin)): ?>
                         <div class="mt-6 flex items-center gap-3">
                             <a href="edit_recipe.php?id=<?= $recipe_id ?>" class="inline-flex items-center rounded-[15px] bg-[#ff6347] text-white px-4 py-2 font-semibold shadow hover:bg-[#e5573e]">Edit</a>
                             <button id="deleteRecipe" class="inline-flex items-center rounded-[15px] bg-black text-white px-4 py-2 font-semibold hover:bg-black/90">Delete</button>
+                            <?php if ($isAdmin && $_SESSION['user_id'] != $recipe['user_id']): ?>
+                                <span class="text-xs px-2 py-1 rounded-[10px] bg-[#ff6347]/10 text-[#ff6347] font-medium">Admin override</span>
+                            <?php endif; ?>
                         </div>
                     <?php endif; ?>
                 </div>
@@ -188,7 +193,7 @@ if ($returnSearch !== '') {
                             <div class="bg-gray-50 border border-gray-200 p-3 rounded-lg">
                                 <div class="text-sm text-gray-700"><strong><?= htmlspecialchars($c['username']) ?></strong> <span class="text-gray-500">(<?= $c['created_at'] ?>)</span></div>
                                 <p class="text-gray-800 mt-1"><?= nl2br(htmlspecialchars($c['comment_text'])) ?></p>
-                                <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $c['uid']): ?>
+                                <?php if (isset($_SESSION['user_id']) && (($_SESSION['user_id'] == $c['uid']) || $isAdmin)): ?>
                                     <button class="delete-comment inline-flex items-center rounded-[15px] bg-black text-white px-3 py-1 text-sm mt-2 hover:bg-black/90" data-id="<?= $c['id'] ?>">Delete</button>
                                 <?php endif; ?>
                             </div>

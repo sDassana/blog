@@ -20,6 +20,7 @@ function parseSimpleMarkdown($text) {
     
     return $text;
 }
+$isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin'; // retained (not used now, but harmless)
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,7 +37,7 @@ function parseSimpleMarkdown($text) {
     <body class="min-h-screen bg-white text-gray-800 scroll-smooth">
         <?php include __DIR__ . '/partials/topbar.php'; ?>
 
-        <main class="max-w-6xl mx-auto px-4 py-6 mb-16">
+    <main class="max-w-6xl mx-auto px-4 pt-0 pb-6 mb-16">
             <?php
                 // Determine if we're on the landing view (no search, first page)
                 $landingSearch = trim($_GET['search'] ?? '');
@@ -82,18 +83,33 @@ function parseSimpleMarkdown($text) {
                                     $sideQuote = $quotes[$i2];
                                 ?>
                                 <section class="mb-8">
-                                    <div class="w-full bg-transparent text-gray-900 overflow-hidden min-h-[60vh] flex flex-col" style="background-image: radial-gradient(ellipse at center, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 35%, rgba(255,255,255,0.75) 55%, rgba(255,255,255,0.5) 70%, rgba(255,255,255,0.25) 85%, rgba(255,255,255,0) 100%), url('/blog/public/assets/hero-cookies.svg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-                                        <!-- Centered quote content -->
-                                        <div class="flex-1 flex items-center justify-center">
-                                            <div class="px-6 text-center max-w-4xl mx-auto">
-                                                <p class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold leading-tight" style="font-family: 'Dancing Script', cursive; font-size: clamp(3rem, 8vw, 9rem); line-height: 1.05; padding-bottom: 20px; padding-top: 20px;">
+                                    <!-- Full-bleed hero wrapper: expands beyond main container to edges -->
+                                                                                                                                                <div class="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen text-gray-900 border-0 overflow-hidden">
+                                                                                                                                                    <div class="relative overflow-hidden flex flex-col border-0 outline-none ring-0" style="aspect-ratio: 3840 / 1600;">
+                                <!-- Split background: hero1 on the left, hero2 on the right -->
+                                <img src="/blog/public/assets/hero1.svg"
+                                    alt="Hero Left"
+                                    draggable="false"
+                                    class="pointer-events-none select-none absolute left-0 top-1/2 -translate-y-1/2 h-full w-auto max-w-none object-contain object-left z-0" />
+                                <img src="/blog/public/assets/hero2.svg"
+                                    alt="Hero Right"
+                                    draggable="false"
+                                    class="pointer-events-none select-none absolute right-0 top-1/2 -translate-y-1/2 h-full w-auto max-w-none object-contain object-right z-0" />
+                                                                            <!-- Radial light overlay -->
+                                                                            <div class="pointer-events-none absolute inset-0 z-10" style="background: radial-gradient(ellipse at center, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 35%, rgba(255,255,255,0.75) 55%, rgba(255,255,255,0.5) 70%, rgba(255,255,255,0.25) 85%, rgba(255,255,255,0) 100%);"></div>
+                                                                            <!-- bottom fade overlay -->
+                                                                            <div class="pointer-events-none absolute inset-x-0 bottom-0 h-32 z-20" style="background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));"></div>
+                                                                            <!-- Centered quote content -->
+                                                                            <div class="flex-1 flex items-center justify-center relative z-30">
+                                                                                <div class="px-6 text-center max-w-4xl mx-auto">
+                                                <p class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight text-center" style="font-family: 'Dancing Script', cursive; font-size: clamp(2.5rem, 6vw, 7rem); line-height: 1.05; padding-bottom: 16px; padding-top: 16px;">
                                                     "<?= htmlspecialchars($heroQuote, ENT_QUOTES, 'UTF-8') ?>"
                                                 </p>
                                             </div>
                                         </div>
                                         <!-- Bottom actions -->
-                                        <div class="px-4 pb-6 md:pb-8">
-                                            <div class="mx-auto max-w-3xl flex flex-col items-center justify-center gap-3">
+                                                                            <div class="px-4 pb-6 md:pb-8 relative z-30">
+                                                                                <div class="mx-auto max-w-3xl flex flex-col items-center justify-center gap-3">
                                                 <div class="flex items-center justify-center gap-3 flex-wrap">
                                                     <a href="/blog/public/add_recipe.php?from=listing" class="inline-flex items-center rounded-[15px] bg-[#ff6347] text-white px-5 py-2.5 font-semibold hover:bg-[#e5573e] w-full sm:w-auto justify-center">Share your own recipes</a>
                                                     <a href="/blog/public/view_recipes.php#latest" class="inline-flex items-center rounded-[15px] border border-[#ff6347]/30 text-[#ff6347] hover:bg-[#ff6347]/10 px-5 py-2.5 font-semibold w-full sm:w-auto justify-center">Explore recipes</a>
@@ -103,6 +119,7 @@ function parseSimpleMarkdown($text) {
                                                 </div>
                                             </div>
                                         </div>
+                                      </div>
                                     </div>
                                 </section>
 
@@ -207,7 +224,7 @@ function parseSimpleMarkdown($text) {
                         $total = (int)$countStmt->fetchColumn();
 
                         // Fetch page (use unique placeholders for repeated terms)
-                        $stmt = $pdo->prepare("SELECT r.id, r.title, r.description, r.category, r.image_main, u.username, r.created_at
+                        $stmt = $pdo->prepare("SELECT r.id, r.title, r.description, r.category, r.image_main, r.user_id, u.username, r.created_at
                                                 FROM recipe r
                                                 JOIN user u ON r.user_id = u.id
                                                 WHERE r.title LIKE :termTitle OR r.tags LIKE :termTags
@@ -223,7 +240,7 @@ function parseSimpleMarkdown($text) {
                         $total = (int)$pdo->query("SELECT COUNT(*) FROM recipe r JOIN user u ON r.user_id = u.id")->fetchColumn();
 
                         // Fetch page
-                        $stmt = $pdo->prepare("SELECT r.id, r.title, r.description, r.category, r.image_main, u.username, r.created_at
+                        $stmt = $pdo->prepare("SELECT r.id, r.title, r.description, r.category, r.image_main, r.user_id, u.username, r.created_at
                                                 FROM recipe r
                                                 JOIN user u ON r.user_id = u.id
                                                 ORDER BY r.created_at DESC
@@ -268,7 +285,8 @@ function parseSimpleMarkdown($text) {
                                                             $truncated = mb_strimwidth($desc, 0, 120, '…', 'UTF-8');
                                                             $desc = parseSimpleMarkdown($truncated);
                                                         }
-                                                        $user = htmlspecialchars($r['username'], ENT_QUOTES, 'UTF-8');
+                            $user = htmlspecialchars($r['username'], ENT_QUOTES, 'UTF-8');
+                                                        // We no longer show manage controls here; only like/save.
                                                         $cat = htmlspecialchars($r['category'], ENT_QUOTES, 'UTF-8');
                                                         $id = (int)$r['id'];
                                                         $qs = http_build_query(array_filter([
@@ -279,8 +297,8 @@ function parseSimpleMarkdown($text) {
                                                         $isLiked = isset($likedMap[$id]);
                                                         $isSaved = isset($savedMap[$id]);
                                                         echo "
-                                                                                            <div class='group bg-white border border-gray-200 rounded-[15px] shadow hover:shadow-md transition overflow-hidden'>
-                                                                <a href='recipe.php?{$qs}' class='block'>
+                                                                                            <div class='group bg-white border border-gray-200 rounded-[15px] shadow hover:shadow-md transition overflow-hidden flex flex-col'>
+                                                                <a href='recipe.php?{$qs}' class='flex flex-1 flex-col'>
                                                                     <div class='aspect-video bg-gray-100 overflow-hidden'>
                                                                         <img src='{$img}' alt='Recipe Image' class='w-full h-full object-cover group-hover:scale-[1.02] transition' />
                                                                     </div>
@@ -388,6 +406,7 @@ function parseSimpleMarkdown($text) {
                             alert('Action failed.');
                         }
                     });
+                    // (Management controls removed from listing; no delete wiring needed.)
                 </script>
                 <?php endif; ?>
                 <script>
