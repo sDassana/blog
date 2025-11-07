@@ -44,84 +44,97 @@ $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin'; // retaine
 
 </head>
 <!-- This is the nav bar -->
+
 <body class="min-h-screen bg-white text-gray-800 scroll-smooth">
     <?php include __DIR__ . '/partials/topbar.php'; ?>
 
     <?php
-        // Random quote selection used by hero and side tile
-        $quotes = [
-            'Cooking is love made visible.',
-            'Good food is the foundation of genuine happiness.',
-            'Baked with love, served with joy.',
-            'Life is short. Eat dessert first.',
-            'The secret ingredient is always love.',
-            'Happiness is homemade.'
-        ];
-        $len = count($quotes);
+    // Random quote selection used by hero and side tile
+    $quotes = [
+        'Cooking is love made visible.',
+        'Good food is the foundation of genuine happiness.',
+        'Baked with love, served with joy.',
+        'Life is short. Eat dessert first.',
+        'The secret ingredient is always love.',
+        'Happiness is homemade.'
+    ];
+    $len = count($quotes);
+    try {
+        $i1 = random_int(0, $len - 1);
+    } catch (Exception $e) {
+        $i1 = array_rand($quotes);
+    }
+    do {
         try {
-            $i1 = random_int(0, $len - 1);
+            $i2 = random_int(0, $len - 1);
         } catch (Exception $e) {
-            $i1 = array_rand($quotes);
+            $i2 = array_rand($quotes);
         }
-        do {
-            try {
-                $i2 = random_int(0, $len - 1);
-            } catch (Exception $e) {
-                $i2 = array_rand($quotes);
-            }
-        } while ($i2 === $i1 && $len > 1);
-        $heroQuote = $quotes[$i1];
-        $sideQuote = $quotes[$i2];
-        
-        // Keep landing detection for featured section
-        $landingSearch = trim($_GET['search'] ?? '');
-        $landingPage = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+    } while ($i2 === $i1 && $len > 1);
+    $heroQuote = $quotes[$i1];
+    $sideQuote = $quotes[$i2];
+
+    // Keep landing detection for featured section
+    $landingSearch = trim($_GET['search'] ?? '');
+    $landingPage = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
     ?>
 
     <!-- HERO SECTION OUTSIDE MAIN -->
     <!-- HERO SECTION -->
     <section style="margin-bottom: 50px; height: 90vh;">
-            <!-- Hero wrapper - full browser width -->
-            <div class="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen text-gray-900 overflow-hidden h-full">
-                <!-- Background layer with images -->
-                <div class="absolute inset-0 w-full h-full" style="background: linear-gradient(to bottom, #fef5e7 0%, #ffffff 100%);">
-                    <!-- Background panels: hero1 (left), hero2 (right) -->
+        <!-- Hero wrapper - full browser width -->
+        <div class="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen text-gray-900 overflow-hidden h-full">
+            <!-- Background layer with images -->
+            <div class="absolute inset-0 w-full h-full" style="background: linear-gradient(to bottom, #fef5e7 0%, #ffffff 100%);">
+
+                <picture class="pointer-events-none select-none absolute left-0 top-0 h-full" style="max-width: 50%;">
+                    <source srcset="/blog/public/assets/hero3.svg" media="(max-width: 967px)">
+
+                    <source srcset="/blog/public/assets/hero1.svg" media="(min-width: 968px)">
+
                     <img src="/blog/public/assets/hero1.svg"
                         alt="Hero Left"
                         draggable="false"
-                        class="pointer-events-none select-none absolute left-0 top-0 h-full w-auto object-contain object-left"
-                        style="max-width: 50%;" />
+                        class="h-full w-auto object-contain object-left" />
+                </picture>
+
+                <picture class="pointer-events-none select-none absolute right-0 top-0 h-full" style="max-width: 50%;">
+                    <source srcset="/blog/public/assets/hero4.svg" media="(max-width: 967px)">
+
+                    <source srcset="/blog/public/assets/hero2.svg" media="(min-width: 968px)">
+
                     <img src="/blog/public/assets/hero2.svg"
                         alt="Hero Right"
                         draggable="false"
-                        class="pointer-events-none select-none absolute right-0 top-0 h-full w-auto object-contain object-right"
-                        style="max-width: 50%;" />
-                </div>
-                <!-- Content layer centered on top -->
-                <div class="relative z-10 flex items-center justify-center h-full">
-                    <div class="flex flex-col items-center justify-center py-16 md:py-24">
-                        <!-- Quote block -->
-                        <div class="px-6 text-center max-w-4xl mx-auto">
-                            <p class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight text-center" style="font-family: 'Dancing Script', cursive; font-size: clamp(2.5rem, 6vw, 7rem); line-height: 1.05;">
-                                "<?= htmlspecialchars($heroQuote, ENT_QUOTES, 'UTF-8') ?>"
-                            </p>
-                        </div>
-                        <!-- CTA cluster positioned below quote -->
-                        <div class="mt-8 sm:mt-10 w-full px-4">
-                            <div class="mx-auto max-w-3xl flex flex-col items-center justify-center gap-2">
-                                <div class="flex items-center justify-center gap-3 flex-wrap">
-                                    <a href="/blog/public/add_recipe.php?from=listing" class="inline-flex items-center rounded-[15px] bg-[#ff6347] text-white px-5 py-2.5 font-semibold hover:bg-[#e5573e] w-full sm:w-auto justify-center">Share your own recipes</a>
-                                    <a href="/blog/public/view_recipes.php#latest" class="inline-flex items-center rounded-[15px] border border-[#ff6347]/30 text-[#ff6347] hover:bg-[#ff6347]/10 px-5 py-2.5 font-semibold w-full sm:w-auto justify-center">Explore recipes</a>
-                                </div>
-                                <div class="mt-2 md:mt-3">
-                                    <a href="/blog/public/about.php" class="inline-flex items-center rounded-[15px] bg-black text-white px-4 py-2 text-sm font-semibold hover:bg-neutral-800 w-full sm:w-auto justify-center">About Us</a>
-                                </div>
+                        class="h-full w-auto object-contain object-right" />
+                </picture>
+
+            </div>
+            <!-- Content layer centered on top -->
+            <div class="relative z-10 flex items-center justify-center h-full">
+                <div class="flex flex-col items-center justify-center py-16 md:py-24">
+                    <!-- Quote block -->
+                    <div class="px-6 text-center max-w-4xl mx-auto">
+                        <p class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight text-center" style="font-family: 'Dancing Script', cursive; font-size: clamp(2.5rem, 6vw, 7rem); line-height: 1.05;">
+                            "<?= htmlspecialchars($heroQuote, ENT_QUOTES, 'UTF-8') ?>"
+                        </p>
+                    </div>
+                    <!-- CTA cluster positioned below quote -->
+                    <div class="mt-8 sm:mt-10 w-full px-4">
+                        <div class="mx-auto max-w-3xl flex flex-col items-center justify-center gap-2">
+                            <div class="flex items-center justify-center gap-3 flex-wrap">
+                                <a href="/blog/public/add_recipe.php?from=listing" class="inline-flex items-center rounded-[15px] bg-[#ff6347] text-white px-5 py-2.5 font-semibold hover:bg-[#e5573e] w-full sm:w-auto justify-center">Share your own recipes</a>
+                                <a href="/blog/public/view_recipes.php#latest" class="inline-flex items-center rounded-[15px] border border-[#ff6347]/30 text-[#ff6347] hover:bg-[#ff6347]/10 px-5 py-2.5 font-semibold w-full sm:w-auto justify-center">Explore recipes</a>
+                            </div>
+                            <div class="mt-2 md:mt-3">
+                                <a href="/blog/public/about.php" class="inline-flex items-center rounded-[15px] bg-black text-white px-4 py-2 text-sm font-semibold hover:bg-neutral-800 w-full sm:w-auto justify-center">About Us</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
     <!-- This is the whole content area after the navbar -->
     <main class="max-w-6xl mx-auto px-4 pt-0 pb-6 mb-16">
