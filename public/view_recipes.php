@@ -109,8 +109,11 @@ $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin'; // retaine
                 </picture>
 
             </div>
-            <!-- Content layer centered on top -->
-            <div class="relative z-10 flex items-center justify-center h-full">
+            <!-- White blur overlay (between background and content) -->
+            <div class="absolute inset-0 z-10 pointer-events-none bg-white/20 backdrop-blur-md"></div>
+
+            <!-- Content layer (raise z to sit above overlay) -->
+            <div class="relative z-20 flex items-center justify-center h-full">
                 <div class="flex flex-col items-center justify-center py-16 md:py-24">
                     <!-- Quote block -->
                     <div class="px-6 text-center max-w-4xl mx-auto">
