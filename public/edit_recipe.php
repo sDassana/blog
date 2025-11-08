@@ -30,7 +30,12 @@ $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <?php $pageTitle = 'Edit Recipe · The Cookie Lovestoblog'; include __DIR__ . '/partials/header.php'; ?>
+    <?php 
+    $pageTitle = 'Edit Recipe · The Cookie Lovestoblog'; 
+    $extraHead = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde@2.18.0/dist/easymde.min.css">
+<script src="https://cdn.jsdelivr.net/npm/easymde@2.18.0/dist/easymde.min.js"></script>';
+    include __DIR__ . '/partials/header.php'; 
+    ?>
   </head>
   <body class="min-h-screen bg-white text-gray-800">
     <?php include __DIR__ . '/partials/topbar.php'; ?>
@@ -71,12 +76,7 @@ $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
 
           <div class="mb-2">
             <label for="description" class="block text-sm text-gray-600 mb-1">Short Description</label>
-            <p class="text-xs text-gray-600 mb-1">Markdown supported: **bold**, _italic_, `code`, lists, links.</p>
-            <textarea id="description" name="description" rows="4" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-amber-400" placeholder="Short description (Markdown supported)"><?= htmlspecialchars($recipe['description'] ?? '') ?></textarea>
-            <div class="mt-2">
-              <div class="text-xs text-gray-500 mb-1">Preview</div>
-              <div id="descPreview" class="min-h-10 text-sm bg-gray-50 border border-gray-200 rounded-lg p-3"></div>
-            </div>
+            <textarea id="description" name="description" placeholder="Short description (Markdown supported)"><?= htmlspecialchars($recipe['description'] ?? '') ?></textarea>
           </div>
 
           <div>
@@ -115,12 +115,7 @@ $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
             <div id="steps" class="space-y-3">
               <?php foreach ($steps as $i => $s): ?>
                 <div>
-                  <p class="text-xs text-gray-600 mb-1">Markdown supported</p>
-                  <textarea name="step_description[]" rows="4" required class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]"><?= htmlspecialchars($s['step_description']) ?></textarea>
-                  <div class="mt-2">
-                    <div class="text-xs text-gray-500 mb-1">Preview</div>
-                    <div class="step-preview min-h-10 text-sm bg-gray-50 border border-gray-200 rounded-lg p-3"></div>
-                  </div>
+                  <textarea name="step_description[]" required><?= htmlspecialchars($s['step_description']) ?></textarea>
                   <input type="hidden" name="step_existing_image[]" value="<?= htmlspecialchars($s['step_image'] ?? '') ?>">
                   <div class="modern-file mt-2 flex items-center">
                     <input id="step_image_<?= $i ?>" type="file" name="step_image[]" accept="image/*" class="hidden">
@@ -144,8 +139,31 @@ $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
     </main>
 
     <script type="module">
-      import { attachLiveMarkdownPreview } from './js/markdown.js';
       import { initModernFileInput } from './js/file-input.js';
+
+      // Initialize SimpleMDE for description
+      const descriptionEditor = new EasyMDE({
+        element: document.getElementById('description'),
+        placeholder: 'Short description (Markdown supported)',
+        spellChecker: false,
+        toolbar: ['bold', 'italic', 'heading', '|', 'quote', 'unordered-list', 'ordered-list', '|', 'link', 'image', '|', 'preview', 'side-by-side', 'fullscreen', '|', 'guide'],
+        status: false
+      });
+
+      // Store SimpleMDE instances for step textareas
+      const stepEditors = new Map();
+
+      // Initialize SimpleMDE for existing steps
+      document.querySelectorAll('#steps textarea[name="step_description[]"]').forEach((textarea) => {
+        const editor = new EasyMDE({
+          element: textarea,
+          placeholder: 'Describe this step (Markdown supported)',
+          spellChecker: false,
+          toolbar: ['bold', 'italic', '|', 'unordered-list', 'ordered-list', '|', 'link', 'image', '|', 'preview', 'guide'],
+          status: false
+        });
+        stepEditors.set(textarea, editor);
+      });
 
       function addIngredient() {
         const div = document.createElement('div');
@@ -158,12 +176,8 @@ $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
       function addStep() {
         const div = document.createElement('div');
   const stepInputId = 'step_image_' + Date.now();
-  div.innerHTML = '<p class="text-xs text-gray-600 mb-1">Markdown supported</p>' +
-                  '<textarea name="step_description[]" rows="4" placeholder="Step description (Markdown supported)" required class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]"></textarea>' +
-                  '<div class="mt-2">' +
-                    '<div class="text-xs text-gray-500 mb-1">Preview</div>' +
-                    '<div class="step-preview min-h-10 text-sm bg-gray-50 border border-gray-200 rounded-lg p-3"></div>' +
-                  '</div>' +
+  const textareaId = 'step_textarea_' + Date.now();
+  div.innerHTML = '<textarea id="' + textareaId + '" name="step_description[]" placeholder="Step description (Markdown supported)" required></textarea>' +
                   '<div class="modern-file mt-2 flex items-center">' +
                     '<input id="' + stepInputId + '" type="file" name="step_image[]" accept="image/*" class="hidden" />' +
                     '<label for="' + stepInputId + '" class="inline-flex items-center rounded-[15px] bg-black text-white px-4 py-2 font-semibold shadow hover:bg-black/90 cursor-pointer">' +
@@ -174,26 +188,23 @@ $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
                   '</div>';
         document.getElementById('steps').appendChild(div);
 
-        const ta = div.querySelector('textarea[name="step_description[]"]');
-        const pv = div.querySelector('.step-preview');
-        attachLiveMarkdownPreview(ta, pv);
+        // Initialize SimpleMDE for the newly added textarea
+        const textarea = document.getElementById(textareaId);
+        const editor = new EasyMDE({
+          element: textarea,
+          placeholder: 'Describe this step (Markdown supported)',
+          spellChecker: false,
+          toolbar: ['bold', 'italic', '|', 'unordered-list', 'ordered-list', '|', 'link', 'image', '|', 'preview', 'guide'],
+          status: false
+        });
+        stepEditors.set(textarea, editor);
+
         // Initialize modern file input for the newly added step
         initModernFileInput(div);
       }
 
       window.addIngredient = addIngredient;
       window.addStep = addStep;
-
-      // Description preview
-      const descTa = document.getElementById('description');
-      const descPv = document.getElementById('descPreview');
-      if (descTa && descPv) attachLiveMarkdownPreview(descTa, descPv);
-
-      // Existing step previews
-      document.querySelectorAll('#steps textarea[name="step_description[]"]').forEach((ta) => {
-        const pv = ta.closest('div').querySelector('.step-preview');
-        if (pv) attachLiveMarkdownPreview(ta, pv);
-      });
 
       // Initialize modern file inputs on load
       initModernFileInput(document);

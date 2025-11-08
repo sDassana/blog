@@ -256,7 +256,7 @@ $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin'; // retaine
             try {
                 $search = trim($_GET['search'] ?? '');
                 $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
-                $perPage = 15;
+                $perPage = 12;
                 $offset = ($page - 1) * $perPage;
 
                 if ($search !== '') {
