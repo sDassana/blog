@@ -34,14 +34,13 @@ $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin'; // retaine
 <html lang="en">
 
 <head>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>All Recipes · The Cookie Lovestoblog</title>
-    <link rel="stylesheet" href="/blog/public/css/app.css" />
-
+        <?php 
+            $pageTitle = 'All Recipes · The Cookie Lovestoblog';
+            $extraHead = '<link rel="preconnect" href="https://fonts.googleapis.com">'
+                                 . '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+                                 . '<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">';
+            include __DIR__ . '/partials/header.php'; 
+        ?>
 </head>
 <!-- This is the nav bar -->
 
@@ -151,6 +150,8 @@ $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin'; // retaine
                 <?php echo htmlspecialchars($msg, ENT_QUOTES, 'UTF-8'); ?>
             </div>
         <?php endif; ?>
+
+        <?php // Removed inline guest inform block to avoid duplicate/always-visible instance. Floating version remains below. ?>
 
         <?php ?>
         <?php if ($landingSearch === '' && $landingPage === 1): ?>
@@ -415,6 +416,26 @@ $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin'; // retaine
         <?php endif; ?>
     </main>
     <?php include __DIR__ . '/partials/footer.php'; ?>
+
+        <?php if (!isset($_SESSION['user_id'])): ?>
+        <!-- Floating guest inform block (re-added here to ensure presence at bottom-right) -->
+        <div id="guest-inform-floating" class="fixed bottom-4 right-4 z-30 w-[320px] max-w-[90vw]">
+                <?php include __DIR__ . '/inform_block.php'; ?>
+        </div>
+        <script>
+            (function(){
+                const box = document.getElementById('guest-inform-floating');
+                if(!box) return;
+                const btn = box.querySelector('[data-dismiss]');
+                if(btn){
+                    btn.addEventListener('click',()=>{
+                        box.classList.add('opacity-0','translate-y-2');
+                        setTimeout(()=>{ box.style.display='none'; },280);
+                    });
+                }
+            })();
+        </script>
+        <?php endif; ?>
 
     <?php if (isset($_SESSION['user_id'])): ?>
         <script>

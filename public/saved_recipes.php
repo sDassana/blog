@@ -21,10 +21,7 @@ $recipes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>My Saved Recipes · The Cookie Loves to Blog</title>
-  <link rel="stylesheet" href="/blog/public/css/app.css" />
-  
+  <?php $pageTitle = 'My Saved Recipes · The Cookie Lovestoblog'; include __DIR__ . '/partials/header.php'; ?>
 </head>
 <body class="font-body bg-amber-50 text-gray-800">
   <?php include __DIR__ . '/partials/topbar.php'; ?>

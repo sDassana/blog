@@ -56,15 +56,17 @@ $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <title><?= htmlspecialchars($recipe['title']) ?> · The Cookie Lovestoblog</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="/blog/public/css/app.css" />
-    
+    <?php $pageTitle = htmlspecialchars($recipe['title']) . ' · The Cookie Lovestoblog'; include __DIR__ . '/partials/header.php'; ?>
 </head>
 
 <body class="min-h-screen bg-white text-gray-800">
     <?php include __DIR__ . '/partials/topbar.php'; ?>
+
+        <?php if (!isset($_SESSION['user_id'])): ?>
+            <div class="max-w-3xl mx-auto px-4 mt-6">
+                <?php include __DIR__ . '/inform_block.php'; ?>
+            </div>
+        <?php endif; ?>
 
     <main class="max-w-6xl mx-auto px-4 py-6 mb-16">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -109,11 +111,11 @@ $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
                     }
                     ?>
                     <div id="likeSection" class="my-3 flex items-center gap-3 text-gray-700">
-                        <button id="likeButton" class="inline-flex items-center gap-1 rounded-[15px] border px-3 py-1 text-sm <?= $isLiked ? 'border-[#ff6347] text-[#ff6347] bg-[#ff6347]/10' : 'border-gray-300 text-gray-700 hover:bg-gray-50' ?>" title="Like">
+                        <button id="likeButton" class="inline-flex items-center gap-1 rounded-[15px] border px-3 py-1 text-sm <?= $isLiked ? 'border-[#ff6347] text-[#ff6347] bg-[#ff6347]/10' : 'border-gray-300 hover:bg-gray-50 text-gray-700' ?>" title="Like">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="<?= $isLiked ? '#ff6347' : 'none' ?>" stroke="<?= $isLiked ? '#ff6347' : 'currentColor' ?>" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7.5 21h7.125a3.375 3.375 0 003.32-2.71l1.194-6.375A2.25 2.25 0 0016.92 9H13.5V6.75A2.25 2.25 0 0011.25 4.5h-.9c-.621 0-1.17.42-1.311 1.023L7.5 9m0 12V9m0 12H5.25A2.25 2.25 0 013 18.75V12.75A2.25 2.25 0 015.25 10.5H7.5" /></svg>
                             <span><?= $isLiked ? 'Liked' : 'Like' ?></span>
                         </button>
-                        <button id="saveButton" class="inline-flex items-center gap-1 rounded-[15px] border px-3 py-1 text-sm <?= $isSaved ? 'border-[#ff6347] text-[#ff6347] bg-[#ff6347]/10' : 'border-gray-300 text-gray-700 hover:bg-gray-50' ?>" title="Save">
+                        <button id="saveButton" class="inline-flex items-center gap-1 rounded-[15px] border px-3 py-1 text-sm <?= $isSaved ? 'border-[#ff6347] text-[#ff6347] bg-[#ff6347]/10' : 'border-gray-300 hover:bg-gray-50 text-gray-700' ?>" title="Save">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="<?= $isSaved ? '#ff6347' : 'none' ?>" stroke="<?= $isSaved ? '#ff6347' : 'currentColor' ?>" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.25 3.75A2.25 2.25 0 017.5 1.5h9a2.25 2.25 0 012.25 2.25v17.19a.75.75 0 01-1.132.65L12 17.25l-5.618 4.34a.75.75 0 01-1.132-.65V3.75z" /></svg>
                             <span><?= $isSaved ? 'Saved' : 'Save' ?></span>
                         </button>

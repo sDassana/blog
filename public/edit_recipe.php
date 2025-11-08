@@ -30,11 +30,7 @@ $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Edit Recipe · The Cookie Lovestoblog</title>
-  <link rel="stylesheet" href="/blog/public/css/app.css" />
-  
+    <?php $pageTitle = 'Edit Recipe · The Cookie Lovestoblog'; include __DIR__ . '/partials/header.php'; ?>
   </head>
   <body class="min-h-screen bg-white text-gray-800">
     <?php include __DIR__ . '/partials/topbar.php'; ?>

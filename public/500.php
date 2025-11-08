@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>500 · The Cookie Lovestoblog</title>
-  <link rel="stylesheet" href="/blog/public/css/app.css" />
-  
+    <?php $pageTitle = '500 · The Cookie Lovestoblog'; include __DIR__ . '/partials/header.php'; ?>
   </head>
   <body class="min-h-screen bg-white text-gray-800 flex items-center">
     <main class="max-w-xl mx-auto px-4 text-center">
