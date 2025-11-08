@@ -37,12 +37,12 @@ $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
     include __DIR__ . '/partials/header.php'; 
     ?>
   </head>
-  <body class="min-h-screen bg-white text-gray-800">
+  <body class="flex flex-col min-h-screen bg-white text-gray-800">
     <?php include __DIR__ . '/partials/topbar.php'; ?>
     <main class="max-w-4xl mx-auto px-4 py-8 mb-16">
       <div class="bg-white rounded-xl shadow border border-gray-200 p-6">
         <h2 class="text-xl font-bold mb-4">Edit Recipe</h2>
-        <form action="../src/controllers/update_recipe.php" method="POST" enctype="multipart/form-data" class="space-y-5">
+  <form id="editRecipeForm" action="../src/controllers/update_recipe.php" method="POST" enctype="multipart/form-data" class="space-y-5">
           <input type="hidden" name="recipe_id" value="<?= $recipe_id ?>">
 
           <div>
@@ -115,7 +115,7 @@ $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
             <div id="steps" class="space-y-3">
               <?php foreach ($steps as $i => $s): ?>
                 <div>
-                  <textarea name="step_description[]" required><?= htmlspecialchars($s['step_description']) ?></textarea>
+                  <textarea name="step_description[]"><?= htmlspecialchars($s['step_description']) ?></textarea>
                   <input type="hidden" name="step_existing_image[]" value="<?= htmlspecialchars($s['step_image'] ?? '') ?>">
                   <div class="modern-file mt-2 flex items-center">
                     <input id="step_image_<?= $i ?>" type="file" name="step_image[]" accept="image/*" class="hidden">
@@ -168,8 +168,9 @@ $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
       function addIngredient() {
         const div = document.createElement('div');
         div.className = 'flex flex-col sm:flex-row gap-2';
-  div.innerHTML = '<input type="text" name="ingredient_name[]" placeholder="Ingredient" required class="flex-1 rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]" />' +
-    '<input type="text" name="ingredient_qty[]" placeholder="Quantity (optional)" class="w-full sm:w-40 rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]" />';
+        // Do not require dynamically added rows; existing rows already ensure at least one ingredient
+        div.innerHTML = '<input type="text" name="ingredient_name[]" placeholder="Ingredient" class="flex-1 rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]" />' +
+                        '<input type="text" name="ingredient_qty[]" placeholder="Quantity (optional)" class="w-full sm:w-40 rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]" />';
         document.getElementById('ingredients').appendChild(div);
       }
 
@@ -177,7 +178,7 @@ $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
         const div = document.createElement('div');
   const stepInputId = 'step_image_' + Date.now();
   const textareaId = 'step_textarea_' + Date.now();
-  div.innerHTML = '<textarea id="' + textareaId + '" name="step_description[]" placeholder="Step description (Markdown supported)" required></textarea>' +
+  div.innerHTML = '<textarea id="' + textareaId + '" name="step_description[]" placeholder="Step description (Markdown supported)"></textarea>' +
                   '<div class="modern-file mt-2 flex items-center">' +
                     '<input id="' + stepInputId + '" type="file" name="step_image[]" accept="image/*" class="hidden" />' +
                     '<label for="' + stepInputId + '" class="inline-flex items-center rounded-[15px] bg-black text-white px-4 py-2 font-semibold shadow hover:bg-black/90 cursor-pointer">' +
@@ -208,6 +209,37 @@ $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
 
       // Initialize modern file inputs on load
       initModernFileInput(document);
+
+      // Ensure SimpleMDE syncs values before form submission (bind to the correct form)
+      const form = document.getElementById('editRecipeForm');
+      if (form) {
+        console.log('[edit-recipe] submit handler attached');
+        form.addEventListener('submit', function(e) {
+          console.log('[edit-recipe] submit fired');
+          // Sync description editor
+          if (descriptionEditor) {
+            descriptionEditor.codemirror.save();
+          }
+          // Sync all step editors
+          stepEditors.forEach((editor, textarea) => {
+            editor.codemirror.save();
+          });
+          
+          // Validate that at least one step has content
+          let hasStepContent = false;
+          document.querySelectorAll('textarea[name="step_description[]"]').forEach(ta => {
+            if (ta.value.trim().length > 0) {
+              hasStepContent = true;
+            }
+          });
+          
+          if (!hasStepContent) {
+            e.preventDefault();
+            alert('Please add at least one step description.');
+            return false;
+          }
+        });
+      }
     </script>
     <?php include __DIR__ . '/partials/footer.php'; ?>
   </body>
