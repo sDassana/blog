@@ -46,7 +46,7 @@ try {
     $upd = $pdo->prepare('UPDATE `user` SET password = :pw WHERE id = :id');
     $upd->execute(['pw' => $hash, 'id' => $userId]);
 
-    setFlash('success', 'Profile updated: Change Password');
+    setFlash('success', 'Profile updated: Changed Password');
 } catch (Exception $e) {
     setFlash('error', 'Failed to update password: ' . htmlspecialchars($e->getMessage()));
 }
