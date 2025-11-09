@@ -2,6 +2,7 @@
 // Handles recipe deletions triggered from the UI; enforces ownership before removing the row.
 require_once __DIR__ . '/../../config/config.php';
 
+header('Content-Type: application/json');
 
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(['error' => 'You must be logged in.']);
@@ -27,13 +28,15 @@ if (!$owner) {
 
 // Allow delete if owner or admin role
 if ($owner != $_SESSION['user_id'] && (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin')) {
-    setFlash('error', 'You cannot delete this recipe.');
-    header('Location: /blog/public/view_recipes.php');
+    echo json_encode(['error' => 'You cannot delete this recipe.']);
     exit;
 }
 
 // Delete recipe (thanks to foreign keys, ingredients, steps, comments, likes are auto-deleted)
 $pdo->prepare("DELETE FROM recipe WHERE id=:id")->execute(['id' => $recipe_id]);
 setFlash('success', 'Recipe deleted successfully!');
-header('Location: /blog/public/view_recipes.php'); // return the user to the listing after removal
+echo json_encode([
+    'status' => 'deleted',
+    'redirect' => '/blog/public/view_recipes.php'
+]);
 exit;

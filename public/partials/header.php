@@ -15,4 +15,5 @@ if (!isset($pageTitle)) {
 <!-- Tailwind CDN (v4 runtime). Loaded BEFORE app.css so existing compiled styles keep precedence. -->
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 <link rel="stylesheet" href="/blog/public/css/app.css" />
+<link rel="stylesheet" href="/blog/public/css/override.css" />
 <?php if (!empty($extraHead)) echo $extraHead; ?>

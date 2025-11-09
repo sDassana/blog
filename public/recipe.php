@@ -52,6 +52,7 @@ if ($returnSearch !== '') {
 }
 // Determine if current user is an admin (used for UI controls / moderation)
 $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+$isLoggedIn = isset($_SESSION['user_id']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -91,7 +92,7 @@ $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
 
                     $isLiked = false;
                     $isSaved = false;
-                    if (isset($_SESSION['user_id'])) {
+                    if ($isLoggedIn) {
                         $checkLike = $pdo->prepare("SELECT id FROM recipe_likes WHERE recipe_id = :id AND user_id = :uid");
                         $checkLike->execute(['id' => $recipe_id, 'uid' => $_SESSION['user_id']]);
                         $isLiked = $checkLike->rowCount() > 0;
@@ -106,14 +107,16 @@ $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
                     }
                     ?>
                     <div id="likeSection" class="my-3 flex items-center gap-3 text-gray-700">
-                        <button id="likeButton" class="inline-flex items-center gap-1 rounded-[15px] border px-3 py-1 text-sm <?= $isLiked ? 'border-[#ff6347] text-[#ff6347] bg-[#ff6347]/10' : 'border-gray-300 hover:bg-gray-50 text-gray-700' ?>" title="Like">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="<?= $isLiked ? '#ff6347' : 'none' ?>" stroke="<?= $isLiked ? '#ff6347' : 'currentColor' ?>" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7.5 21h7.125a3.375 3.375 0 003.32-2.71l1.194-6.375A2.25 2.25 0 0016.92 9H13.5V6.75A2.25 2.25 0 0011.25 4.5h-.9c-.621 0-1.17.42-1.311 1.023L7.5 9m0 12V9m0 12H5.25A2.25 2.25 0 013 18.75V12.75A2.25 2.25 0 015.25 10.5H7.5" /></svg>
-                            <span><?= $isLiked ? 'Liked' : 'Like' ?></span>
-                        </button>
-                        <button id="saveButton" class="inline-flex items-center gap-1 rounded-[15px] border px-3 py-1 text-sm <?= $isSaved ? 'border-[#ff6347] text-[#ff6347] bg-[#ff6347]/10' : 'border-gray-300 hover:bg-gray-50 text-gray-700' ?>" title="Save">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="<?= $isSaved ? '#ff6347' : 'none' ?>" stroke="<?= $isSaved ? '#ff6347' : 'currentColor' ?>" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.25 3.75A2.25 2.25 0 017.5 1.5h9a2.25 2.25 0 012.25 2.25v17.19a.75.75 0 01-1.132.65L12 17.25l-5.618 4.34a.75.75 0 01-1.132-.65V3.75z" /></svg>
-                            <span><?= $isSaved ? 'Saved' : 'Save' ?></span>
-                        </button>
+                        <?php if ($isLoggedIn): ?>
+                            <button id="likeButton" class="inline-flex items-center gap-1 rounded-[15px] border px-3 py-1 text-sm <?= $isLiked ? 'border-[#ff6347] text-[#ff6347] bg-[#ff6347]/10' : 'border-gray-300 hover:bg-gray-50 text-gray-700' ?>" title="Like">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="<?= $isLiked ? '#ff6347' : 'none' ?>" stroke="<?= $isLiked ? '#ff6347' : 'currentColor' ?>" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7.5 21h7.125a3.375 3.375 0 003.32-2.71l1.194-6.375A2.25 2.25 0 0016.92 9H13.5V6.75A2.25 2.25 0 0011.25 4.5h-.9c-.621 0-1.17.42-1.311 1.023L7.5 9m0 12V9m0 12H5.25A2.25 2.25 0 013 18.75V12.75A2.25 2.25 0 015.25 10.5H7.5" /></svg>
+                                <span><?= $isLiked ? 'Liked' : 'Like' ?></span>
+                            </button>
+                            <button id="saveButton" class="inline-flex items-center gap-1 rounded-[15px] border px-3 py-1 text-sm <?= $isSaved ? 'border-[#ff6347] text-[#ff6347] bg-[#ff6347]/10' : 'border-gray-300 hover:bg-gray-50 text-gray-700' ?>" title="Save">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="<?= $isSaved ? '#ff6347' : 'none' ?>" stroke="<?= $isSaved ? '#ff6347' : 'currentColor' ?>" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.25 3.75A2.25 2.25 0 017.5 1.5h9a2.25 2.25 0 012.25 2.25v17.19a.75.75 0 01-1.132.65L12 17.25l-5.618 4.34a.75.75 0 01-1.132-.65V3.75z" /></svg>
+                                <span><?= $isSaved ? 'Saved' : 'Save' ?></span>
+                            </button>
+                        <?php endif; ?>
                         <span id="likeCount" class="text-sm font-medium"><?= $likeCount ?></span>
                         <span class="text-sm">likes</span>
                     </div>
@@ -201,6 +204,24 @@ $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
         </div>
     </main>
 
+    <div id="delete-confirm-overlay" class="hidden fixed inset-0 z-50" role="dialog" aria-modal="true" aria-labelledby="delete-confirm-title">
+        <div id="delete-confirm-backdrop" class="flex min-h-full w-full items-center justify-center bg-black/40 px-4">
+            <div class="relative flex w-full max-w-sm flex-col gap-4 rounded-[15px] border border-gray-200 bg-[#FAF7F2] px-6 py-5 text-sm text-gray-700 shadow-lg">
+                <button type="button" aria-label="Dismiss delete confirmation" class="absolute top-3 right-3 h-6 w-6 flex items-center justify-center rounded-full text-gray-500 hover:text-gray-700 hover:bg-gray-100" data-dismiss-delete>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6l12 12M6 18L18 6"/></svg>
+                </button>
+                <div class="pr-4">
+                    <p id="delete-confirm-title" class="text-base font-semibold text-gray-800">Delete this recipe?</p>
+                    <p class="mt-2 text-sm leading-relaxed text-gray-700">This action cannot be undone. We'll remove the recipe along with its steps, comments, likes, and saves.</p>
+                </div>
+                <div class="flex flex-wrap gap-2 pt-1">
+                    <button type="button" id="cancelDelete" class="inline-flex flex-1 items-center justify-center rounded-[15px] border border-[#ff6347]/30 bg-transparent px-4 py-2 text-[0.8rem] font-semibold text-[#ff6347] hover:bg-[#ff6347]/10 focus:outline-none focus:ring-2 focus:ring-[#ff6347]/40">Cancel</button>
+                    <button type="button" id="confirmDelete" class="inline-flex flex-1 items-center justify-center rounded-[15px] bg-[#ff6347] px-4 py-2 text-[0.8rem] font-semibold text-white shadow hover:bg-[#e5573e] focus:outline-none focus:ring-2 focus:ring-[#ff6347]/60">Delete recipe</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <?php if (!isset($_SESSION['user_id'])): ?>
         <div id="guest-inform-floating" class="fixed bottom-4 right-4 z-30 w-[320px] max-w-[90vw]">
             <?php include __DIR__ . '/inform_block.php'; ?>
@@ -278,21 +299,81 @@ $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
         }
 
         const del = document.getElementById('deleteRecipe');
-        if (del) {
-            del.addEventListener('click', async () => {
-                if (!confirm('Are you sure you want to delete this recipe?')) return;
+        const deleteModal = document.getElementById('delete-confirm-overlay');
+        const confirmDeleteBtn = document.getElementById('confirmDelete');
+        const cancelDeleteBtn = document.getElementById('cancelDelete');
+        const dismissDeleteBtn = document.querySelector('[data-dismiss-delete]');
+        const deleteBackdrop = document.getElementById('delete-confirm-backdrop');
+        let deletePending = false;
+
+        const toggleDeleteModal = (show) => {
+            if (!deleteModal) return;
+            if (show) {
+                deleteModal.classList.remove('hidden');
+            } else {
+                deleteModal.classList.add('hidden');
+            }
+        };
+
+        if (del && deleteModal && confirmDeleteBtn && cancelDeleteBtn) {
+            del.addEventListener('click', () => {
+                if (deletePending) return;
+                toggleDeleteModal(true);
+            });
+
+            const closeModal = () => {
+                if (deletePending) return;
+                toggleDeleteModal(false);
+            };
+
+            cancelDeleteBtn.addEventListener('click', closeModal);
+            if (dismissDeleteBtn) {
+                dismissDeleteBtn.addEventListener('click', closeModal);
+            }
+            if (deleteBackdrop) {
+                deleteBackdrop.addEventListener('click', (evt) => {
+                    if (evt.target === deleteBackdrop) {
+                        closeModal();
+                    }
+                });
+            } else {
+                deleteModal.addEventListener('click', (evt) => {
+                    if (evt.target === deleteModal) {
+                    closeModal();
+                }
+                });
+            }
+
+            confirmDeleteBtn.addEventListener('click', async () => {
+                if (deletePending) return;
+                deletePending = true;
+                confirmDeleteBtn.disabled = true;
+                confirmDeleteBtn.classList.add('opacity-80');
+
                 const fd = new FormData();
                 fd.append('recipe_id', <?= json_encode($recipe_id) ?>);
-                const res = await fetch('../src/controllers/delete_recipe.php', {
-                    method: 'POST',
-                    body: fd
-                });
-                const data = await res.json();
-                if (data.status === 'deleted') {
-                    alert('Recipe deleted successfully');
-                    window.location.href = 'view_recipes.php';
-                } else {
-                    alert(data.error);
+                try {
+                    const res = await fetch('../src/controllers/delete_recipe.php', {
+                        method: 'POST',
+                        body: fd
+                    });
+                    const data = await res.json();
+                    if (data && data.status === 'deleted') {
+                        window.location.href = data.redirect || '/blog/public/view_recipes.php';
+                        return;
+                    }
+                    if (data && data.error) {
+                        alert(data.error);
+                    } else {
+                        alert('Unable to delete the recipe.');
+                    }
+                } catch (err) {
+                    alert('Something went wrong. Please try again.');
+                } finally {
+                    deletePending = false;
+                    confirmDeleteBtn.disabled = false;
+                    confirmDeleteBtn.classList.remove('opacity-80');
+                    toggleDeleteModal(false);
                 }
             });
         }

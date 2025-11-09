@@ -29,6 +29,15 @@ function parseSimpleMarkdown($text)
 
     return $text;
 }
+
+$assetVersion = static function (string $filename): int {
+    $path = __DIR__ . '/assets/' . $filename;
+    return @filemtime($path) ?: time();
+};
+$hero1Version = $assetVersion('hero1.svg');
+$hero2Version = $assetVersion('hero2.svg');
+$hero3Version = $assetVersion('hero3x.svg');
+$hero4Version = $assetVersion('hero4x.svg');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -85,12 +94,12 @@ function parseSimpleMarkdown($text)
             <!-- Background layer with images (desktop only) -->
             <div class="absolute inset-0 w-full h-full hidden md:block" style="background: linear-gradient(to bottom, #fef5e7 0%, #ffffff 100%);">
                 <picture class="pointer-events-none select-none absolute left-0 top-0 h-full" style="max-width: 50%;">
-                    <source srcset="/blog/public/assets/hero1.svg" media="(min-width: 968px)">
-                    <img src="/blog/public/assets/hero1.svg" alt="Hero Left" draggable="false" class="h-full w-auto object-contain object-left" />
+                    <source srcset="assets/hero1.svg?v=<?= $hero1Version ?>" media="(min-width: 968px)">
+                    <img src="assets/hero1.svg?v=<?= $hero1Version ?>" alt="Hero Left" draggable="false" class="h-full w-auto object-contain object-left" />
                 </picture>
                 <picture class="pointer-events-none select-none absolute right-0 top-0 h-full" style="max-width: 50%;">
-                    <source srcset="/blog/public/assets/hero2.svg" media="(min-width: 968px)">
-                    <img src="/blog/public/assets/hero2.svg" alt="Hero Right" draggable="false" class="h-full w-auto object-contain object-right" />
+                    <source srcset="assets/hero2.svg?v=<?= $hero2Version ?>" media="(min-width: 968px)">
+                    <img src="assets/hero2.svg?v=<?= $hero2Version ?>" alt="Hero Right" draggable="false" class="h-full w-auto object-contain object-right" />
                 </picture>
             </div>
             <!-- White blur overlay (between background and content) 
@@ -122,8 +131,8 @@ function parseSimpleMarkdown($text)
                     <!-- Mobile hero imagery with dedicated space (acts as background layer) -->
                     <div class="md:hidden relative mt-8 w-full z-0">
                         <div class="-mx-8 flex items-end justify-between pointer-events-none">
-                            <img src="/blog/public/assets/hero3x.svg" alt="Hero Image A" class="w-1/2 max-w-none object-contain" draggable="false">
-                            <img src="/blog/public/assets/hero4x.svg" alt="Hero Image B" class="w-1/2 max-w-none object-contain" draggable="false">
+                            <img src="assets/hero3x.svg?v=<?= $hero3Version ?>" alt="Hero Image A" class="w-1/2 max-w-none object-contain" draggable="false">
+                            <img src="assets/hero4x.svg?v=<?= $hero4Version ?>" alt="Hero Image B" class="w-1/2 max-w-none object-contain" draggable="false">
                         </div>
                     </div>
                 </div>

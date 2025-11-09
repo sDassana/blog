@@ -11,16 +11,18 @@ unset($_SESSION['login_errors'], $_SESSION['old_email']);
   <head>
     <?php $pageTitle = 'Login · The Cookie Lovestoblog'; include __DIR__ . '/partials/header.php'; ?>
   </head>
-  <body class="min-h-screen bg-white text-gray-800">
+  <body class="min-h-screen bg-white text-gray-800 flex flex-col">
     <?php include __DIR__ . '/partials/topbar.php'; ?>
 
-    <main class="w-full max-w-md mx-auto mt-10 mb-20 bg-white border border-gray-200 rounded-xl shadow-md">
+  <div class="flex flex-col flex-1">
+
+  <main class="w-full max-w-md mx-auto mt-10 bg-white border border-gray-200 rounded-xl shadow-md">
   <div class="px-6 py-5 border-b border-gray-200 bg-white rounded-t-xl">
         <h1 id="login-title" class="text-xl font-bold tracking-tight">Welcome back</h1>
         <p class="text-sm text-gray-500">Sign in to continue to your account</p>
       </div>
 
-      <div class="p-6">
+  <div class="p-6 space-y-4">
         <?php if (!empty($success)): ?>
           <div class="mb-4 rounded-lg border border-green-200 bg-green-50 text-green-700 px-3 py-2 text-sm" role="status" aria-live="polite">
             <?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8'); ?>
@@ -70,6 +72,8 @@ unset($_SESSION['login_errors'], $_SESSION['old_email']);
   <a class="text-[#ff6347] hover:underline" href="/blog/public/view_recipes.php">Back to recipes</a>
       </div>
     </main>
+
+  </div>
 
     <?php include __DIR__ . '/partials/footer.php'; ?>
   </body>
