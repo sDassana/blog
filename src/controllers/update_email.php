@@ -1,7 +1,6 @@
 <?php
-session_start();
+// Updates the logged-in user's email address after validating password and uniqueness.
 require_once __DIR__ . '/../../config/config.php';
-require_once __DIR__ . '/../../src/helpers/flash.php';
 
 if (!isset($_SESSION['user_id'])) {
     setFlash('error', 'You must be logged in.');
@@ -48,7 +47,7 @@ try {
     $upd = $pdo->prepare('UPDATE `user` SET email = :email WHERE id = :id');
     $upd->execute(['email' => $newEmail, 'id' => $userId]);
 
-    setFlash('success', 'Email updated successfully.');
+    setFlash('success', 'Profile updated: Changed Email');
 } catch (Exception $e) {
     setFlash('error', 'Failed to update email: ' . htmlspecialchars($e->getMessage()));
 }

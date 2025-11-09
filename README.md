@@ -33,7 +33,7 @@ Users can:
 
 - Register/login/logout using `password_hash()` and `password_verify()`
 - Secure sessions and flash messaging
-- Profile fields: display name, about, avatar upload
+- Profile fields: display name
 
 ### Recipe CRUD
 
@@ -102,15 +102,14 @@ blog/
 │   │   └── tw-input.css              # Tailwind input (with @tailwind)
 │   ├── js/
 │   │   ├── file-input.js
-│   │   └── markdown.js
 │   ├── partials/
 │   │   ├── footer.php
 │   │   └── topbar.php
 │   └── uploads/
 │       ├── .htaccess                 # Blocks script execution
 │       ├── .gitkeep
-│       └── avatars/
-│           └── (user avatar files)
+│       ├── recipe_*.jpg/png          # Main recipe images (generated names)
+│       └── step_*.jpg/png            # Step-by-step images (generated names)
 └── src/
     ├── controllers/
     │   ├── add_comment.php
@@ -132,8 +131,6 @@ blog/
     │   ├── markdown.php
     │   ├── recovery_words.php
     │   └── redirect.php
-    └── styles/
-        └── input.css
 ```
 
 ## Security and Configuration
@@ -160,7 +157,7 @@ Additional safeguards:
 
 Tables used by the app:
 
-- `user` (`id`, `username`, `email`, `password_hash`, `role`, `about`, `avatar`, `created_at`)
+- `user` (`id`, `username`, `email`, `password_hash`, `role`, `created_at`)
 - `recipe` (`id`, `user_id`, `title`, `category`, `tags`, `image_main`, `created_at`)
 - `recipe_ingredients` (`id`, `recipe_id`, `ingredient_name`, `quantity`)
 - `recipe_steps` (`id`, `recipe_id`, `step_number`, `step_description`, `step_image`)
@@ -180,7 +177,7 @@ If you need, we can generate a SQL schema and seed data matching this codebase.
 | Area     | Test                                                                 |
 |----------|----------------------------------------------------------------------|
 | Auth     | Register/login/logout with valid/invalid credentials                 |
-| Profile  | Update name, about, and avatar; changes persist                      |
+| Profile  | Update display name, email, and password                             |
 | CRUD     | Create/edit/delete recipe with images, ingredients, steps            |
 | Likes    | Like/unlike updates the count and UI                                 |
 | Comments | Add/delete comments; correct attribution and timestamps              |

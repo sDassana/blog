@@ -1,4 +1,5 @@
 <?php
+// Utilities for generating, normalizing, and hashing five-word recovery phrases.
 // List of ~200 simple common words (neutral, non-branded)
 function get_recovery_word_list(): array {
     return [

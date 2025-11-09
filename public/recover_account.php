@@ -1,16 +1,12 @@
 <?php
-session_start();
-require_once __DIR__ . '/../src/helpers/flash.php';
+require_once __DIR__ . '/../config/config.php';
 
-// You can allow recovery without being logged in; this page is for locked-out users.
+// Self-service account recovery page for users who remember their five-word phrase.
 ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Recover Account · The Cookie Lovestoblog</title>
-    <link rel="stylesheet" href="/blog/public/css/app.css" />
+    <?php $pageTitle = 'Recover Account · The Cookie Lovestoblog'; include __DIR__ . '/partials/header.php'; ?>
   </head>
   <body class="min-h-screen bg-white text-gray-800">
     <?php include __DIR__ . '/partials/topbar.php'; ?>
@@ -122,9 +118,3 @@ require_once __DIR__ . '/../src/helpers/flash.php';
     })();
   </script>
 </html>
-          if (!bothFilled) nmsg.classList.add('hidden');
-        }
-        if (npw && ncf) { npw.addEventListener('input', updateMatch); ncf.addEventListener('input', updateMatch); }
-      })();
-    </script>
-    </html>

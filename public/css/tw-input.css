@@ -1,3 +1,4 @@
+/* Tailwind source stub consumed during local builds. */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -23,3 +24,57 @@ input, select, textarea {
 .card, .panel { border-radius: 20px; }
 
 .btn, button { border-radius: 20px; }
+
+/* Reusable form helpers used across account/auth pages */
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #4b5563;
+  margin-bottom: 0.25rem;
+}
+
+.form-control {
+  width: 100%;
+  border-radius: 20px;
+  border: 1px solid #d1d5db;
+  padding: 0.5rem 0.75rem;
+  color: #1f2937;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  border-color: #ff6347;
+  box-shadow: 0 0 0 2px rgba(255, 99, 71, 0.2);
+}
+
+.form-hint {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: #6b7280;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  background-color: #ff6347;
+  color: #ffffff;
+  padding: 0.625rem 1.25rem;
+  font-weight: 600;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #e5573e;
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}

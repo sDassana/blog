@@ -1,7 +1,6 @@
 <?php
-session_start();
+// Interface for generating or saving a fresh set of recovery words for the logged-in user.
 require_once __DIR__ . '/../config/config.php';
-require_once __DIR__ . '/../src/helpers/flash.php';
 require_once __DIR__ . '/../src/helpers/recovery_words.php';
 
 if (!isset($_SESSION['user_id'])) {
@@ -9,12 +8,8 @@ if (!isset($_SESSION['user_id'])) {
   exit;
 }
 
-// Handle regenerate action locally (no DB writes)
-if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && ($_POST['action'] ?? '') === 'regen') {
-  $candidate = pick_random_words(5);
-} else {
-  $candidate = pick_random_words(5);
-}
+// Always generate a fresh candidate set on load; form submission already reloads the page.
+$candidate = pick_random_words(5);
 
 $preview = $_SESSION['recovery_preview'] ?? null;
 unset($_SESSION['recovery_preview']);
@@ -22,10 +17,7 @@ unset($_SESSION['recovery_preview']);
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Recovery Words · The Cookie</title>
-    <link rel="stylesheet" href="/blog/public/css/app.css" />
+    <?php $pageTitle = 'Recovery Words · The Cookie Lovestoblog'; include __DIR__ . '/partials/header.php'; ?>
   </head>
   <body class="min-h-screen bg-white text-gray-800">
     <?php include __DIR__ . '/partials/topbar.php'; ?>

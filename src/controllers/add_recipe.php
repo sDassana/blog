@@ -1,5 +1,5 @@
 <?php
-session_start();
+// Processes the "Add Recipe" form, including uploads, ingredient rows, and step images.
 require_once __DIR__ . '/../../config/config.php';
 
 if (!isset($_SESSION['user_id'])) {
@@ -18,6 +18,18 @@ if (!is_dir($uploadDir)) {
 // Handle form data
 $title = trim($_POST['title'] ?? '');
 $category = $_POST['category'] ?? '';
+// Whitelist allowed categories (must match front-end select and ENUM definition)
+$ALLOWED_CATEGORIES = [
+    'Appetizer / Starter',
+    'Main Course',
+    'Side Dish',
+    'Dessert',
+    'Snack',
+    'Soup / Salad',
+    'Bread / Pastry',
+    'Drink / Beverage',
+    'Sauce / Dip / Spread'
+];
 $tags = trim($_POST['tags'] ?? '');
 $description = trim($_POST['description'] ?? '');
 $ingredient_names = $_POST['ingredient_name'] ?? [];
@@ -29,6 +41,11 @@ $errors = [];
 
 if ($title === '' || $category === '' || empty($ingredient_names) || empty($step_descriptions)) {
     $errors[] = "All required fields must be filled.";
+}
+
+// Validate category against whitelist
+if ($category !== '' && !in_array($category, $ALLOWED_CATEGORIES, true)) {
+    $errors[] = "Invalid category selected.";
 }
 
 // Handle main image upload (safe filename + whitelist by MIME)
@@ -55,13 +72,15 @@ if (!empty($errors)) {
 }
 
 try {
+    // Use a transaction so recipe metadata, ingredients, and steps land together.
     $pdo->beginTransaction();
 
-    // Ensure category column can store new categories (migrate from ENUM to VARCHAR if needed)
+    // Ensure category column conforms to ENUM of allowed categories (best-effort)
+    // NOTE: This may fail if existing values outside set exist; adjust manually if needed.
     try {
-        $pdo->exec("ALTER TABLE recipe MODIFY category VARCHAR(100) NOT NULL");
+        $pdo->exec("ALTER TABLE recipe MODIFY category ENUM('Appetizer / Starter','Main Course','Side Dish','Dessert','Snack','Soup / Salad','Bread / Pastry','Drink / Beverage','Sauce / Dip / Spread') NOT NULL");
     } catch (Exception $e) {
-        // ignore if not needed or lacks permissions
+        // ignore if cannot alter (permissions / existing non-matching values)
     }
 
     // Ensure description column exists (best-effort)

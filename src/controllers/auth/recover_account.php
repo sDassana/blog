@@ -1,8 +1,6 @@
 <?php
-// src/controllers/auth/recover_account.php
-session_start();
+// Resets a password after confirming the submitted recovery words and new credential.
 require_once __DIR__ . '/../../../config/config.php';
-require_once __DIR__ . '/../../helpers/flash.php';
 require_once __DIR__ . '/../../helpers/recovery_words.php';
 
 $email = trim($_POST['email'] ?? '');

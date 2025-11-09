@@ -1,15 +1,8 @@
 <?php
-//config/config.php
-//loads .env and creates a PDO $pdo connection for the app.
-// Remember: should not expose this file publicly.
-
-// Back-compat: define no-op CSRF helpers if legacy controllers still reference them
-if (!function_exists('csrf_abort_if_invalid_redirect')) {
-    function csrf_abort_if_invalid_redirect() { /* CSRF disabled: no-op */ }
-}
-if (!function_exists('csrf_input')) {
-    function csrf_input() { return ''; }
-}
+/**
+ * App bootstrap: loads .env values, configures the PDO handle, and wires session helpers.
+ * Keep this file outside the public web root to avoid exposing credentials.
+ */
 
 if (!function_exists('env')) {
     function env(string $key, $default = null) {
@@ -75,3 +68,8 @@ try {
     // Stop execution
     exit;
 }   
+
+// Start a secure session for all requests (idempotent)
+require_once __DIR__ . '/../src/helpers/session.php';
+require_once __DIR__ . '/../src/helpers/flash.php';
+start_secure_session();

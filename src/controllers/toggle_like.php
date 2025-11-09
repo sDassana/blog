@@ -1,5 +1,5 @@
 <?php
-session_start();
+// AJAX handler that flips a user's like state for a recipe and returns the new status.
 require_once __DIR__ . '/../../config/config.php';
 
 if (!isset($_SESSION['user_id'])) {

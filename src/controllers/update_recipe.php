@@ -1,5 +1,5 @@
 <?php
-session_start();
+// Updates an existing recipe, syncing metadata, ingredients, steps, and optional images.
 require_once __DIR__ . '/../../config/config.php';
 
 if (!isset($_SESSION['user_id'])) {
@@ -14,7 +14,8 @@ if (!$recipe_id) { echo "Missing recipe ID."; exit; }
 $stmt = $pdo->prepare("SELECT user_id FROM recipe WHERE id=:id");
 $stmt->execute(['id'=>$recipe_id]);
 $owner = $stmt->fetchColumn();
-if ($owner != $_SESSION['user_id']) {
+$isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+if ($owner != $_SESSION['user_id'] && !$isAdmin) {
     echo "Unauthorized.";
     exit;
 }
@@ -29,14 +30,31 @@ try {
 // Update main details
 $title = $_POST['title'];
 $category = $_POST['category'];
+// Whitelist allowed categories
+$ALLOWED_CATEGORIES = [
+    'Appetizer / Starter',
+    'Main Course',
+    'Side Dish',
+    'Dessert',
+    'Snack',
+    'Soup / Salad',
+    'Bread / Pastry',
+    'Drink / Beverage',
+    'Sauce / Dip / Spread'
+];
+
+if (!in_array($category, $ALLOWED_CATEGORIES, true)) {
+    echo "Invalid category.";
+    exit;
+}
 $tags = $_POST['tags'];
 $description = trim($_POST['description'] ?? '');
 
-// Best-effort: ensure category column can accept the updated option set
+// Best-effort: enforce ENUM constraint (safe if column already enum); ignore failures
 try {
-    $pdo->exec("ALTER TABLE recipe MODIFY category VARCHAR(100) NOT NULL");
+    $pdo->exec("ALTER TABLE recipe MODIFY category ENUM('Appetizer / Starter','Main Course','Side Dish','Dessert','Snack','Soup / Salad','Bread / Pastry','Drink / Beverage','Sauce / Dip / Spread') NOT NULL");
 } catch (Exception $e) {
-    // ignore if already compatible
+    // ignore if cannot alter
 }
 
 $mainImagePath = null;

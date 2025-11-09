@@ -1,7 +1,6 @@
 <?php
-session_start();
+// Allows users to set a new password after confirming their current one and passing strength checks.
 require_once __DIR__ . '/../../config/config.php';
-require_once __DIR__ . '/../../src/helpers/flash.php';
 
 if (!isset($_SESSION['user_id'])) {
     setFlash('error', 'You must be logged in.');
@@ -47,7 +46,7 @@ try {
     $upd = $pdo->prepare('UPDATE `user` SET password = :pw WHERE id = :id');
     $upd->execute(['pw' => $hash, 'id' => $userId]);
 
-    setFlash('success', 'Password updated successfully.');
+    setFlash('success', 'Profile updated: Changed Password');
 } catch (Exception $e) {
     setFlash('error', 'Failed to update password: ' . htmlspecialchars($e->getMessage()));
 }

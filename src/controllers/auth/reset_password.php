@@ -1,7 +1,6 @@
 <?php
-session_start();
+// Handles the simple email-based reset flow triggered from forgot_password.php.
 require_once __DIR__ . '/../../../config/config.php';
-require_once __DIR__ . '/../../helpers/flash.php';
 
 $email = $_POST['email'] ?? '';
 $new_password = $_POST['new_password'] ?? '';

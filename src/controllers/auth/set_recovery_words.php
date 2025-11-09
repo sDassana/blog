@@ -1,8 +1,6 @@
 <?php
-// src/controllers/auth/set_recovery_words.php
-session_start();
+// Persists the five-word recovery phrase for the logged-in user, hashing each entry.
 require_once __DIR__ . '/../../../config/config.php';
-require_once __DIR__ . '/../../helpers/flash.php';
 require_once __DIR__ . '/../../helpers/recovery_words.php';
 
 if (!isset($_SESSION['user_id'])) {
@@ -21,7 +19,7 @@ try {
     $normalized = normalize_recovery_words($words);
     $hashes = hash_recovery_words($normalized); // length 5
 
-    // Upsert into user_recovery
+    // Upsert into user_recovery so the set is replaced atomically on every save.
     $pdo->beginTransaction();
     $exists = $pdo->prepare('SELECT id FROM user_recovery WHERE user_id = :uid LIMIT 1');
     $exists->execute(['uid' => $uid]);
