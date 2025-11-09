@@ -1,80 +1,87 @@
-C:\\xampp\\htdocs\\blog
+\\xampp\\htdocs\\blog
 │
-├─ .env                                ← environment variables (DB creds, secrets; not committed)
-├─ .env.example                        ← sample env file to copy to .env
+├─ .env                                ← Environment variables (DB creds, secrets)
+├─ .env.example                        ← Template for creating a local .env
 ├─ .git/                               ← Git metadata
-├─ .gitignore                          ← files/folders Git should ignore
-├─ .htaccess                           ← Apache rules (routing, security for subfolders)
-├─ composer.json                       ← PHP dependencies (if/when using Composer)
-├─ index.php                           ← entry point (can route or redirect)
+├─ .gitignore                          ← Files/folders Git should ignore
+├─ .htaccess                           ← Apache rules (HTTPS redirect, security)
+├─ index.php                           ← Entry point/redirector for public routes
 ├─ package.json                        ← Node/Tailwind build scripts
-├─ package-lock.json                   ← Locked Node deps
-├─ postcss.config.js                   ← PostCSS/Autoprefixer config
-├─ tailwind.config.js                  ← Tailwind config (content paths, theme)
-├─ README.md                           ← Project readme
-├─ structure.md                        ← This file: human-friendly project tree
-│
-├─ config\                             ← App configuration (non-public)
-│  └─ config.php                       ← Loads .env, initializes PDO ($pdo), logging on failure
-│
+├─ package-lock.json                   ← Locked Node dependency versions
+├─ postcss.config.js                   ← PostCSS + Autoprefixer configuration
+├─ README.md                           ← Project documentation
+├─ recipe_blog.sql                     ← Database schema/seed export
+├─ structure.md                        ← This file (project layout guide)
+├─ tailwind.config.js                  ← Tailwind content paths/theme overrides
+├─ config\                             ← Application configuration (non-public)
+│  └─ config.php                       ← Loads .env, boots PDO, session + error handling
 ├─ logs\                               ← Application logs (non-public)
-│  ├─ .gitkeep                         ← Keeps folder in Git
-│  └─ errors.log                       ← Error log from DB/connect/runtime issues
-│
-├─ public\                             ← Web root: files directly served by Apache
-│  ├─ 404.php                          ← Not found page
-│  ├─ 500.php                          ← Server error page
-│  ├─ about.php                        ← About/Contact page
-│  ├─ add_recipe.php                   ← Add new recipe form (Markdown preview, images)
-│  ├─ dashboard.php                    ← User dashboard (saved/own recipes etc.)
-│  ├─ edit_recipe.php                  ← Edit existing recipe form
-│  ├─ forgot_password.php              ← Start password reset flow (email/words)
-│  ├─ login.php                        ← Login screen (uses themed public UI)
-│  ├─ recipe.php                       ← Single recipe view (ingredients, steps, likes)
-│  ├─ register.php                     ← Account registration form
-│  ├─ saved_recipes.php                ← User’s saved/bookmarked recipes
-│  ├─ view_recipes.php                 ← Listing/search page (hero, quotes, cards)
-│  ├─ assets\                          ← Images and static assets
-│  │  ├─ brand.png                     ← Site brand/logo image
-│  │  ├─ hero-cookies.svg              ← Decorative hero background vectors
-│  │  ├─ README.txt                    ← Notes about asset usage
-│  │  └─ icons\                        ← Social icons
-│  │     ├─ facebook.png
-│  │     ├─ instagram.png
-│  │     ├─ linkedin.png
-│  │     └─ x.png
-│  ├─ css\                             ← Compiled and source CSS for the site
-│  │  ├─ app.css                       ← Compiled output (Tailwind build target)
-│  │  └─ tw-input.css                  ← Tailwind input (with @tailwind directives)
-│  ├─ js\                              ← Client-side JavaScript
-│  │  ├─ file-input.js                 ← Modern file input styling/behavior
-│  ├─ partials\                        ← Shared UI components
-│  │  ├─ footer.php                    ← Site footer
-│  │  └─ topbar.php                    ← Top navigation bar
-│  └─ uploads\                         ← User-uploaded files (protected by .htaccess)
-│     ├─ .gitkeep                      ← Keeps folder in Git
-│     ├─ .htaccess                     ← Prevents script execution, protects files
-│     ├─ recipe_*.jpg/png              ← Main recipe images (generated names)
-│     └─ step_*.jpg/png                ← Step-by-step images (generated names)
-│
-└─ src\                                ← Application (backend) code
-	├─ controllers\                     ← Request handlers for forms and AJAX
-	│  ├─ add_comment.php               ← Add a comment to a recipe
-	│  ├─ add_recipe.php                ← Persist a new recipe + uploads
-	│  ├─ delete_comment.php            ← Delete a user’s comment
-	│  ├─ delete_recipe.php             ← Delete user-owned recipe
-	│  ├─ login.php                     ← Authenticate user (sets session)
-	│  ├─ logout.php                    ← Destroy session and redirect
-	│  ├─ register.php                  ← Create new user account
-	│  ├─ reset_password.php            ← Handle password reset (token/words)
-	│  ├─ toggle_like.php               ← Like/unlike a recipe (AJAX JSON)
-	│  ├─ toggle_save.php               ← Save/unsave a recipe (AJAX JSON)
-	│  ├─ update_email.php              ← Update account email
-	│  ├─ update_password.php           ← Change password
-	│  ├─ update_profile.php            ← Update profile display name
-	│  └─ update_recipe.php             ← Persist edits to a recipe
-	├─ helpers\                         ← Small reusable utilities
-	│  ├─ flash.php                     ← Flash messages in session
-	│  ├─ markdown.php                  ← Server-side Markdown (safe subset)
-	│  ├─ recovery_words.php            ← Generate/validate 5 recovery words
-	│  └─ redirect.php                  ← Safe redirects with optional anchors
+│  ├─ .gitkeep                         ← Keeps folder versioned
+│  └─ errors.log                       ← Database/Runtime error output
+├─ node_modules\                       ← Installed Node packages (generated)
+├─ public\                             ← Web root served by Apache
+│  ├─ 404.php                          ← Not-found view
+│  ├─ 500.php                          ← Server-error fallback
+│  ├─ about.php                        ← About & contact information
+│  ├─ add_recipe.php                   ← Recipe creation form (EasyMDE Markdown)
+│  ├─ dashboard.php                    ← Member dashboard & quick actions
+│  ├─ edit_recipe.php                  ← Recipe edit form
+│  ├─ forgot_password.php              ← Password reset (email entry)
+│  ├─ inform_block.php                 ← Reusable guest call-to-action card
+│  ├─ login.php                        ← Sign-in screen
+│  ├─ partials\                        ← Shared layout components
+│  │  ├─ footer.php                    ← Global footer (sticky layout)
+│  │  ├─ header.php                    ← <head> fragment (fonts, CSS links)
+│  │  └─ topbar.php                    ← Fixed navigation bar + search
+│  ├─ recipe.php                       ← Single recipe view (steps, comments)
+│  ├─ recovery_words.php               ← Recovery words entry form
+│  ├─ recover_account.php              ← Account recovery via words
+│  ├─ register.php                     ← Sign-up form
+│  ├─ saved_recipes.php                ← Saved/bookmarked recipes list
+│  ├─ view_recipes.php                 ← Recipe listing + hero experience
+│  ├─ assets\                          ← Static imagery/icons
+│  │  ├─ brand.png                     ← Logo asset
+│  │  ├─ hero1.svg / hero2.svg         ← Desktop hero artwork (left/right)
+│  │  ├─ hero3x.svg / hero4x.svg       ← Mobile hero artwork
+│  │  └─ icons\                        ← Social icons (facebook.png, instagram.png, linkedin.png, x.png)
+│  ├─ css\                             ← Stylesheets served to the browser
+│  │  ├─ app.css                       ← Compiled Tailwind output
+│  │  ├─ override.css                  ← Layout overrides (sticky footer, etc.)
+│  │  └─ tw-input.css                  ← Tailwind input (source before build)
+│  ├─ js\                              ← Client-side helpers
+│  │  ├─ file-input.js                 ← File picker UX
+│  │  └─ markdown.js                   ← EasyMDE configuration helpers
+│  └─ uploads\                         ← User-uploaded media (guarded by .htaccess)
+│     ├─ .gitkeep                      ← Keeps directory in version control
+│     ├─ .htaccess                     ← Blocks script execution, direct listing
+│     ├─ recipe_*.jpg/png              ← Main recipe images
+│     └─ step_*.jpg/png                ← Step-by-step images
+└─ src\                                ← Backend application code
+	├─ controllers\                    ← Form/AJAX handlers
+	│  ├─ add_comment.php              ← Persist new comment
+	│  ├─ add_recipe.php               ← Store recipe + assets
+	│  ├─ auth\                        ← Auth flows (frontend routes post here)
+	│  │  ├─ login.php                 ← Login controller
+	│  │  ├─ logout.php                ← Logout controller
+	│  │  ├─ recover_account.php       ← Start recovery via words
+	│  │  ├─ register.php              ← Registration controller
+	│  │  ├─ reset_password.php        ← Complete reset via recovery words
+	│  │  └─ set_recovery_words.php    ← Store recovery words post-registration
+	│  ├─ delete_comment.php           ← Remove a comment
+	│  ├─ delete_recipe.php            ← Delete owned/admin recipe (JSON response)
+	│  ├─ login.php                    ← Legacy login endpoint (frontend uses auth/)
+	│  ├─ logout.php                   ← Legacy logout (deprecated by auth/)
+	│  ├─ register.php                 ← Legacy register (deprecated by auth/)
+	│  ├─ reset_password.php           ← Password reset handler
+	│  ├─ toggle_like.php              ← Toggle like state (JSON)
+	│  ├─ toggle_save.php              ← Toggle save state (JSON)
+	│  ├─ update_email.php             ← Change account email
+	│  ├─ update_password.php          ← Change password
+	│  ├─ update_profile.php           ← Update display name
+	│  └─ update_recipe.php            ← Persist recipe edits
+	└─ helpers\                        ← Reusable helper utilities
+		├─ flash.php                   ← Session-based flash messaging
+		├─ markdown.php                ← Markdown-to-HTML (safe subset)
+		├─ recovery_words.php          ← Recovery word generation + validation
+		├─ redirect.php                ← Safe redirect helper
+		└─ session.php                 ← Session bootstrap/guard helpers

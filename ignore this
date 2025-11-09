@@ -1,9 +1,0 @@
-# block access to .env
-
-<FilesMatch "^\.env$">
-Require all denied
-</FilesMatch>
-Options -Indexes
-
-ErrorDocument 404 /blog/public/404.php
-ErrorDocument 500 /blog/public/500.php
