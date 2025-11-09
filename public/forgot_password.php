@@ -32,12 +32,21 @@ require_once __DIR__ . '/../config/config.php';
           </div>
           <div>
             <label class="block text-sm text-gray-600 mb-1">Recovery words (in order)</label>
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
-              <input name="words[]" required placeholder="word 1" class="rounded-[12px] border border-gray-300 px-3 py-2" />
-              <input name="words[]" required placeholder="word 2" class="rounded-[12px] border border-gray-300 px-3 py-2" />
-              <input name="words[]" required placeholder="word 3" class="rounded-[12px] border border-gray-300 px-3 py-2" />
-              <input name="words[]" required placeholder="word 4" class="rounded-[12px] border border-gray-300 px-3 py-2" />
-              <input name="words[]" required placeholder="word 5" class="rounded-[12px] border border-gray-300 px-3 py-2" />
+            <div class="grid grid-cols-6 gap-3">
+              <?php for ($i = 1; $i <= 3; $i++): ?>
+                <div class="col-span-2 flex justify-center">
+                  <input name="words[]" required placeholder="word <?= $i ?>" class="w-full max-w-[200px] text-center rounded-[12px] border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]" />
+                </div>
+              <?php endfor; ?>
+            </div>
+            <div class="grid grid-cols-6 gap-3 mt-3">
+              <div class="col-span-1"></div>
+              <?php for ($i = 4; $i <= 5; $i++): ?>
+                <div class="col-span-2 flex justify-center">
+                  <input name="words[]" required placeholder="word <?= $i ?>" class="w-full max-w-[200px] text-center rounded-[12px] border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]" />
+                </div>
+              <?php endfor; ?>
+              <div class="col-span-1"></div>
             </div>
             <p class="text-xs text-gray-500 mt-1">Letters only, 2–32 characters each.</p>
           </div>

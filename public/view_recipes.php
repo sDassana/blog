@@ -78,59 +78,52 @@ $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin'; // retaine
     $landingPage = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
     ?>
 
-    <!-- HERO SECTION OUTSIDE MAIN -->
     <!-- HERO SECTION -->
-    <section style="margin-bottom: 50px; height: 90vh;">
+    <section class="mb-12">
         <!-- Hero wrapper - full browser width -->
-        <div class="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen text-gray-900 overflow-hidden h-full">
-            <!-- Background layer with images -->
-            <div class="absolute inset-0 w-full h-full" style="background: linear-gradient(to bottom, #fef5e7 0%, #ffffff 100%);">
-
+        <div class="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen text-gray-900 overflow-hidden md:h-[90vh]">
+            <!-- Background layer with images (desktop only) -->
+            <div class="absolute inset-0 w-full h-full hidden md:block" style="background: linear-gradient(to bottom, #fef5e7 0%, #ffffff 100%);">
                 <picture class="pointer-events-none select-none absolute left-0 top-0 h-full" style="max-width: 50%;">
-                    <source srcset="/blog/public/assets/hero3.svg" media="(max-width: 967px)">
-
                     <source srcset="/blog/public/assets/hero1.svg" media="(min-width: 968px)">
-
-                    <img src="/blog/public/assets/hero1.svg"
-                        alt="Hero Left"
-                        draggable="false"
-                        class="h-full w-auto object-contain object-left" />
+                    <img src="/blog/public/assets/hero1.svg" alt="Hero Left" draggable="false" class="h-full w-auto object-contain object-left" />
                 </picture>
-
                 <picture class="pointer-events-none select-none absolute right-0 top-0 h-full" style="max-width: 50%;">
-                    <source srcset="/blog/public/assets/hero4.svg" media="(max-width: 967px)">
-
                     <source srcset="/blog/public/assets/hero2.svg" media="(min-width: 968px)">
-
-                    <img src="/blog/public/assets/hero2.svg"
-                        alt="Hero Right"
-                        draggable="false"
-                        class="h-full w-auto object-contain object-right" />
+                    <img src="/blog/public/assets/hero2.svg" alt="Hero Right" draggable="false" class="h-full w-auto object-contain object-right" />
                 </picture>
-
             </div>
-            <!-- White blur overlay (between background and content) -->
-            <div class="absolute inset-0 z-10 pointer-events-none bg-white/20 backdrop-blur-md"></div>
+            <!-- White blur overlay (between background and content) 
+            <div class="absolute inset-0 z-10 pointer-events-none bg-white/20 backdrop-blur-md"></div>-->
 
             <!-- Content layer (raise z to sit above overlay) -->
-            <div class="relative z-20 flex items-center justify-center h-full">
-                <div class="flex flex-col items-center justify-center py-16 md:py-24">
+            <div class="relative z-20 flex items-center justify-center md:h-full">
+                <div class="relative flex flex-col items-center justify-center w-full px-8 pt-20 pb-0 md:px-0 md:pt-28 md:pb-0">
                     <!-- Quote block -->
-                    <div class="px-6 text-center max-w-4xl mx-auto">
+                    <div class="relative z-10 px-6 text-center max-w-4xl mx-auto">
                         <p class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight text-center" style="font-family: 'Dancing Script', cursive; font-size: clamp(2.5rem, 6vw, 7rem); line-height: 1.05;">
                             "<?= htmlspecialchars($heroQuote, ENT_QUOTES, 'UTF-8') ?>"
                         </p>
                     </div>
                     <!-- CTA cluster positioned below quote -->
-                    <div class="mt-8 sm:mt-10 w-full px-4">
-                        <div class="mx-auto max-w-3xl flex flex-col items-center justify-center gap-2">
-                            <div class="flex items-center justify-center gap-3 flex-wrap">
-                                <a href="/blog/public/add_recipe.php?from=listing" class="inline-flex items-center rounded-[15px] bg-[#ff6347] text-white px-5 py-2.5 font-semibold hover:bg-[#e5573e] w-full sm:w-auto justify-center">Share your own recipes</a>
-                                <a href="/blog/public/view_recipes.php#latest" class="inline-flex items-center rounded-[15px] border border-[#ff6347]/30 text-[#ff6347] hover:bg-[#ff6347]/10 px-5 py-2.5 font-semibold w-full sm:w-auto justify-center">Explore recipes</a>
+                    <div class="relative z-10 mt-8 sm:mt-10 w-full px-6 md:px-4">
+                        <div class="w-full">
+                            <div class="mx-auto max-w-3xl flex flex-col items-center justify-center gap-2">
+                                <div class="flex items-center justify-center gap-3 flex-wrap">
+                                    <a href="/blog/public/add_recipe.php?from=listing" class="inline-flex items-center rounded-[15px] bg-[#ff6347] text-white px-5 py-2.5 font-semibold hover:bg-[#e5573e] w-full sm:w-auto justify-center">Share your own recipes</a>
+                                    <a href="/blog/public/view_recipes.php#latest" class="inline-flex items-center rounded-[15px] border border-[#ff6347]/30 text-[#ff6347] hover:bg-[#ff6347]/10 px-5 py-2.5 font-semibold w-full sm:w-auto justify-center">Explore recipes</a>
+                                </div>
+                                <div class="mt-2 md:mt-3">
+                                    <a href="/blog/public/about.php" class="inline-flex items-center rounded-[15px] bg-black text-white px-4 py-2 text-sm font-semibold hover:bg-neutral-800 w-full sm:w-auto justify-center">About Us</a>
+                                </div>
                             </div>
-                            <div class="mt-2 md:mt-3">
-                                <a href="/blog/public/about.php" class="inline-flex items-center rounded-[15px] bg-black text-white px-4 py-2 text-sm font-semibold hover:bg-neutral-800 w-full sm:w-auto justify-center">About Us</a>
-                            </div>
+                        </div>
+                    </div>
+                    <!-- Mobile hero imagery with dedicated space (acts as background layer) -->
+                    <div class="md:hidden relative mt-8 w-full z-0">
+                        <div class="-mx-8 flex items-end justify-between pointer-events-none">
+                            <img src="/blog/public/assets/hero3x.svg" alt="Hero Image A" class="w-1/2 max-w-none object-contain" draggable="false">
+                            <img src="/blog/public/assets/hero4x.svg" alt="Hero Image B" class="w-1/2 max-w-none object-contain" draggable="false">
                         </div>
                     </div>
                 </div>

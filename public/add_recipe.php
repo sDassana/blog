@@ -28,7 +28,16 @@ include __DIR__ . '/partials/header.php';
       <div class="bg-white rounded-xl shadow border border-gray-200 p-6">
         <a href="<?= htmlspecialchars($backUrl, ENT_QUOTES, 'UTF-8') ?>" class="inline-flex items-center text-[#ff6347] hover:underline mb-3">Back</a>
         <h2 class="text-xl font-bold mb-4">Share a New Recipe</h2>
-  <form id="recipeForm" action="../src/controllers/add_recipe.php" method="POST" enctype="multipart/form-data" class="space-y-5">
+  <div id="step-warning" class="hidden mb-4 w-full rounded-[15px] border border-[#ff6347]/30 bg-[#fff0e9] px-6 py-5 text-sm text-gray-700 shadow-md relative" role="alert" aria-live="assertive">
+          <button type="button" aria-label="Dismiss step warning" class="absolute top-2 right-2 h-6 w-6 flex items-center justify-center rounded-full text-gray-500 hover:text-gray-700 hover:bg-gray-100" data-step-warning-dismiss>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6l12 12M6 18L18 6"/></svg>
+          </button>
+          <div class="pr-4">
+            <p class="text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-[#ff6347]">Action Required</p>
+            <p class="mt-1 text-sm leading-relaxed text-gray-700">Please add at least one step description before publishing your recipe.</p>
+          </div>
+        </div>
+        <form id="recipeForm" action="../src/controllers/add_recipe.php" method="POST" enctype="multipart/form-data" class="space-y-5">
           <div>
             <label class="block text-sm text-gray-600 mb-1">Recipe Title</label>
             <input type="text" name="title" required class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]" />
@@ -120,10 +129,43 @@ include __DIR__ . '/partials/header.php';
 
       // Store SimpleMDE instances for step textareas
       const stepEditors = new Map();
+      const stepWarning = document.getElementById('step-warning');
+
+      function showStepWarning() {
+        if (!stepWarning) return;
+        stepWarning.classList.remove('hidden');
+        stepWarning.classList.add('flex', 'flex-col', 'gap-3');
+        const dismissBtn = stepWarning.querySelector('[data-step-warning-dismiss]');
+        if (dismissBtn) {
+          dismissBtn.focus();
+        }
+        stepWarning.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      function hideStepWarning() {
+        if (!stepWarning || stepWarning.classList.contains('hidden')) return;
+        stepWarning.classList.add('hidden');
+        stepWarning.classList.remove('flex', 'flex-col', 'gap-3');
+      }
+
+      const stepWarningDismiss = stepWarning ? stepWarning.querySelector('[data-step-warning-dismiss]') : null;
+      if (stepWarningDismiss) {
+        stepWarningDismiss.addEventListener('click', hideStepWarning);
+      }
+
+      function attachStepEditorListeners(editor) {
+        if (!editor) return;
+        editor.codemirror.on('change', () => {
+          if (editor.value().trim().length > 0) {
+            hideStepWarning();
+          }
+        });
+      }
 
       // Initialize SimpleMDE for initial step
       const initialStepTextarea = document.querySelector('#steps textarea[name="step_description[]"]');
       if (initialStepTextarea) {
+        initialStepTextarea.addEventListener('input', hideStepWarning);
         const editor = new EasyMDE({
           element: initialStepTextarea,
           placeholder: 'Describe this step (Markdown supported)',
@@ -132,6 +174,7 @@ include __DIR__ . '/partials/header.php';
           status: false
         });
         stepEditors.set(initialStepTextarea, editor);
+        attachStepEditorListeners(editor);
       }
 
       function addIngredient() {
@@ -145,17 +188,17 @@ include __DIR__ . '/partials/header.php';
 
       function addStep() {
         const div = document.createElement('div');
-  const stepInputId = 'step_image_' + Date.now();
-  const textareaId = 'step_textarea_' + Date.now();
-  div.innerHTML = '<textarea id="' + textareaId + '" name="step_description[]" placeholder="Describe this step (Markdown supported)"></textarea>' +
-                  '<div class="modern-file mt-2 flex items-center">' +
-                    '<input id="' + stepInputId + '" type="file" name="step_image[]" accept="image/*" class="hidden" />' +
-                    '<label for="' + stepInputId + '" class="inline-flex items-center rounded-[15px] bg-black text-white px-4 py-2 font-semibold shadow hover:bg-black/90 cursor-pointer">' +
-                      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4 mr-2"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7.5h3l1.5-2.25h9L18 7.5h3A1.5 1.5 0 0122.5 9v9A1.5 1.5 0 0121 19.5H3A1.5 1.5 0 011.5 18V9A1.5 1.5 0 013 7.5zm9 9a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z"/></svg>' +
-                      'Upload step image' +
-                    '</label>' +
-                    '<span class="file-name text-sm text-gray-600 ml-3">No file chosen</span>' +
-                  '</div>';
+        const stepInputId = 'step_image_' + Date.now();
+        const textareaId = 'step_textarea_' + Date.now();
+        div.innerHTML = '<textarea id="' + textareaId + '" name="step_description[]" placeholder="Describe this step (Markdown supported)"></textarea>' +
+                        '<div class="modern-file mt-2 flex items-center">' +
+                          '<input id="' + stepInputId + '" type="file" name="step_image[]" accept="image/*" class="hidden" />' +
+                          '<label for="' + stepInputId + '" class="inline-flex items-center rounded-[15px] bg-black text-white px-4 py-2 font-semibold shadow hover:bg-black/90 cursor-pointer">' +
+                            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4 mr-2"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7.5h3l1.5-2.25h9L18 7.5h3A1.5 1.5 0 0122.5 9v9A1.5 1.5 0 0121 19.5H3A1.5 1.5 0 011.5 18V9A1.5 1.5 0 013 7.5zm9 9a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z"/></svg>' +
+                            'Upload step image' +
+                          '</label>' +
+                          '<span class="file-name text-sm text-gray-600 ml-3">No file chosen</span>' +
+                        '</div>';
         document.getElementById('steps').appendChild(div);
 
         // Initialize SimpleMDE for the newly added textarea
@@ -168,6 +211,8 @@ include __DIR__ . '/partials/header.php';
           status: false
         });
         stepEditors.set(textarea, editor);
+        attachStepEditorListeners(editor);
+        textarea.addEventListener('input', hideStepWarning);
 
         // Initialize modern file input for the newly added step
         initModernFileInput(div);
@@ -205,9 +250,10 @@ include __DIR__ . '/partials/header.php';
           
           if (!hasStepContent) {
             e.preventDefault();
-            alert('Please add at least one step description.');
+            showStepWarning();
             return false;
           }
+          hideStepWarning();
         });
       }
     </script>

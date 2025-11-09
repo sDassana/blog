@@ -23,16 +23,16 @@
   <head>
     <?php $pageTitle = 'Create account · The Cookie Lovestoblog'; include __DIR__ . '/partials/header.php'; ?>
   </head>
-  <body class="min-h-screen bg-white text-gray-800 flex flex-col">
+  <body class="min-h-screen bg-white text-gray-800">
     <?php include __DIR__ . '/partials/topbar.php'; ?>
-    <div class="flex-1 w-full flex items-center justify-center">
-  <main class="w-full max-w-4xl mx-auto my-0 bg-white border border-gray-200 rounded-xl shadow-md" role="main" aria-labelledby="register-title">
-  <div class="px-6 py-5 border-b border-gray-200 bg-white rounded-t-xl">
-        <h1 id="register-title" class="text-xl font-bold tracking-tight">Create your account</h1>
-        <p class="text-sm text-gray-500">Join to start sharing your recipes</p>
-      </div>
-      <div class="p-6">
-        <?php if (!empty($regErrors)): ?>
+    <div class="w-full px-4 sm:px-6">
+      <main class="w-full max-w-4xl mx-auto mt-10 mb-16 bg-white border border-gray-200 rounded-xl shadow-md" role="main" aria-labelledby="register-title">
+        <div class="px-6 py-5 border-b border-gray-200 bg-white rounded-t-xl">
+          <h1 id="register-title" class="text-xl font-bold tracking-tight">Create your account</h1>
+          <p class="text-sm text-gray-500">Join to start sharing your recipes</p>
+        </div>
+        <div class="p-6">
+          <?php if (!empty($regErrors)): ?>
           <div class="mb-4 rounded-lg border border-red-200 bg-red-50 text-red-700 px-3 py-2 text-sm" role="alert" aria-live="polite">
             <strong class="font-semibold">Please fix the following:</strong>
             <ul class="list-disc pl-5 mt-1">
@@ -41,8 +41,8 @@
               <?php endforeach; ?>
             </ul>
           </div>
-        <?php endif; ?>
-  <form action="../src/controllers/auth/register.php" method="POST" novalidate class="space-y-4">
+          <?php endif; ?>
+          <form action="../src/controllers/auth/register.php" method="POST" novalidate class="space-y-4">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Left panel: account fields -->
             <div class="space-y-4">
@@ -99,54 +99,53 @@
               <p class="text-xs text-gray-600 mb-3">These five words act like recovery keys. Save them securely. The order matters (1 → 5). You’ll need them to reset your password if you forget it.</p>
 
               <!-- Strict 3 then 2 layout using 6-column grid to keep equal widths and center bottom row -->
-              <div class="grid grid-cols-1 md:grid-cols-6 gap-3">
+              <div class="grid grid-cols-6 gap-3">
                 <?php foreach ($candidate_row1 as $w): ?>
-                  <div class="relative md:col-span-2">
+                  <div class="relative col-span-2 flex justify-center">
                     <input
                       name="words[]"
                       value="<?php echo htmlspecialchars($w, ENT_QUOTES, 'UTF-8'); ?>"
                       required
                       pattern="[A-Za-z]{2,32}"
                       title="Letters only, 2–32 characters"
-                      class="w-full rounded-[12px] border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]"
+                      class="w-full max-w-[200px] text-center rounded-[12px] border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]"
                     />
                   </div>
                 <?php endforeach; ?>
               </div>
 
-              <div class="grid grid-cols-1 md:grid-cols-6 gap-3 mt-3">
-                <!-- Left spacer to center the two inputs on md -->
-                <div class="hidden md:block md:col-span-1"></div>
+              <div class="grid grid-cols-6 gap-3 mt-3">
+                <!-- Left spacer to center the two inputs -->
+                <div class="col-span-1"></div>
                 <?php foreach ($candidate_row2 as $w): ?>
-                  <div class="relative md:col-span-2">
+                  <div class="relative col-span-2 flex justify-center">
                     <input
                       name="words[]"
                       value="<?php echo htmlspecialchars($w, ENT_QUOTES, 'UTF-8'); ?>"
                       required
                       pattern="[A-Za-z]{2,32}"
                       title="Letters only, 2–32 characters"
-                      class="w-full rounded-[12px] border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]"
+                      class="w-full max-w-[200px] text-center rounded-[12px] border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ff6347]"
                     />
                   </div>
                 <?php endforeach; ?>
-                <!-- Right spacer to center the two inputs on md -->
-                <div class="hidden md:block md:col-span-1"></div>
+                <!-- Right spacer to center the two inputs -->
+                <div class="col-span-1"></div>
               </div>
 
               <div class="mt-2 text-xs flex items-center gap-3">
                 <p class="text-gray-500">Tip: Write them down in order or store them in a secure password manager.</p>
                 <span id="copy-words-status" class="hidden text-green-600">Copied</span>
               </div>
+
+              <div class="mt-6 text-center md:text-left">
+                <button class="inline-flex items-center justify-center rounded-[15px] bg-[#ff6347] text-white px-5 py-2.5 font-semibold shadow hover:bg-[#e5573e] active:translate-y-px" type="submit">Create account</button>
+              </div>
             </div>
           </div>
-          <div class="pt-4">
-            <div class="text-center">
-              <button class="inline-flex items-center justify-center rounded-[15px] bg-[#ff6347] text-white px-5 py-2.5 font-semibold shadow hover:bg-[#e5573e] active:translate-y-px" type="submit">Create account</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </main>
+          </form>
+        </div>
+      </main>
     </div>
     <?php include __DIR__ . '/partials/footer.php'; ?>
   </body>

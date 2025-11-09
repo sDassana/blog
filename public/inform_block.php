@@ -9,7 +9,7 @@
 	</button>
 	<div class="pr-4">
 		<p class="text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-gray-500">Guest preview</p>
-		<p class="mt-1 text-sm leading-relaxed text-gray-700">You're browsing without signing in. Log in to publish recipes, save favorites, comment, and like.</p>
+		<p class="mt-1 text-sm leading-relaxed text-gray-700">You’re browsing as a guest. Log in to share your recipes, save favorites, and engage with the community.</p>
 	</div>
 	<div class="flex flex-wrap gap-2">
 		<a href="/blog/public/login.php" class="inline-flex flex-1 items-center justify-center rounded-[15px] bg-[#ff6347] text-white px-4 py-2 text-[0.75rem] font-semibold shadow hover:bg-[#e5573e] active:translate-y-px" aria-label="Log in to your account">Log in</a>
