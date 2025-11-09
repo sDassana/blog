@@ -1,6 +1,5 @@
 <?php
-// src/helpers/session.php
-// Secure session starter and flash message helper
+// Secure session bootstrapping utilities shared across front-facing controllers.
 
 if (!function_exists('start_secure_session')) {
     function start_secure_session(): void {
@@ -27,19 +26,3 @@ if (!function_exists('start_secure_session')) {
     }
 }
 
-// Flash message helper (shows once)
-if (!function_exists('flash')) {
-    function flash(string $key, ?string $message = null) {
-        start_secure_session();
-        if ($message === null) {
-            if (!empty($_SESSION['_flash'][$key])) {
-                $msg = $_SESSION['_flash'][$key];
-                unset($_SESSION['_flash'][$key]);
-                return $msg;
-            }
-            return null;
-        } else {
-            $_SESSION['_flash'][$key] = $message;
-        }
-    }
-}

@@ -1,4 +1,5 @@
 <?php
+// Displays the logged-in user's saved recipes grid, redirecting guests to login.
 require_once __DIR__ . '/../config/config.php';
 
 if (!isset($_SESSION['user_id'])) {

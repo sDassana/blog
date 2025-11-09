@@ -48,16 +48,12 @@ C:\\xampp\\htdocs\\blog
 │  │  └─ tw-input.css                  ← Tailwind input (with @tailwind directives)
 │  ├─ js\                              ← Client-side JavaScript
 │  │  ├─ file-input.js                 ← Modern file input styling/behavior
-│  │  └─ markdown.js                   ← Safe Markdown preview + toolbar helpers
 │  ├─ partials\                        ← Shared UI components
 │  │  ├─ footer.php                    ← Site footer
 │  │  └─ topbar.php                    ← Top navigation bar
 │  └─ uploads\                         ← User-uploaded files (protected by .htaccess)
 │     ├─ .gitkeep                      ← Keeps folder in Git
 │     ├─ .htaccess                     ← Prevents script execution, protects files
-│     ├─ avatars\                      ← User profile images
-│     │  ├─ u1_1761248573.jpg
-│     │  └─ u7_1761249375.jpg
 │     ├─ recipe_*.jpg/png              ← Main recipe images (generated names)
 │     └─ step_*.jpg/png                ← Step-by-step images (generated names)
 │
@@ -75,12 +71,10 @@ C:\\xampp\\htdocs\\blog
 	│  ├─ toggle_save.php               ← Save/unsave a recipe (AJAX JSON)
 	│  ├─ update_email.php              ← Update account email
 	│  ├─ update_password.php           ← Change password
-	│  ├─ update_profile.php            ← Update profile info/avatar
+	│  ├─ update_profile.php            ← Update profile display name
 	│  └─ update_recipe.php             ← Persist edits to a recipe
 	├─ helpers\                         ← Small reusable utilities
 	│  ├─ flash.php                     ← Flash messages in session
 	│  ├─ markdown.php                  ← Server-side Markdown (safe subset)
 	│  ├─ recovery_words.php            ← Generate/validate 5 recovery words
 	│  └─ redirect.php                  ← Safe redirects with optional anchors
-	└─ styles\                          ← Source CSS for Tailwind build
-		└─ input.css                     ← Tailwind layers and custom CSS inputs

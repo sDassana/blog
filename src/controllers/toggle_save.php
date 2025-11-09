@@ -1,4 +1,5 @@
 <?php
+// AJAX handler that toggles a recipe's saved state for the current user.
 require_once __DIR__ . '/../../config/config.php';
 
 header('Content-Type: application/json');

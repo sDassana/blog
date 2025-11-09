@@ -1,4 +1,5 @@
 <?php
+// Handles recipe deletions triggered from the UI; enforces ownership before removing the row.
 require_once __DIR__ . '/../../config/config.php';
 
 
@@ -34,5 +35,5 @@ if ($owner != $_SESSION['user_id'] && (!isset($_SESSION['role']) || $_SESSION['r
 // Delete recipe (thanks to foreign keys, ingredients, steps, comments, likes are auto-deleted)
 $pdo->prepare("DELETE FROM recipe WHERE id=:id")->execute(['id' => $recipe_id]);
 setFlash('success', 'Recipe deleted successfully!');
-header('Location: /blog/public/view_recipes.php');
+header('Location: /blog/public/view_recipes.php'); // return the user to the listing after removal
 exit;

@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../config/config.php';
 
-// You can allow recovery without being logged in; this page is for locked-out users.
+// Self-service account recovery page for users who remember their five-word phrase.
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -118,9 +118,3 @@ require_once __DIR__ . '/../config/config.php';
     })();
   </script>
 </html>
-          if (!bothFilled) nmsg.classList.add('hidden');
-        }
-        if (npw && ncf) { npw.addEventListener('input', updateMatch); ncf.addEventListener('input', updateMatch); }
-      })();
-    </script>
-    </html>

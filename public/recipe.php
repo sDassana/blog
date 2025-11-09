@@ -1,4 +1,5 @@
 <?php
+// Recipe detail view with ingredients, steps, interactive likes, saves, and comments.
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../src/helpers/markdown.php';
 
@@ -61,12 +62,6 @@ $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
 
 <body class="min-h-screen bg-white text-gray-800">
     <?php include __DIR__ . '/partials/topbar.php'; ?>
-
-        <?php if (!isset($_SESSION['user_id'])): ?>
-            <div class="max-w-3xl mx-auto px-4 mt-6">
-                <?php include __DIR__ . '/inform_block.php'; ?>
-            </div>
-        <?php endif; ?>
 
     <main class="max-w-6xl mx-auto px-4 py-6 mb-16">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -205,6 +200,25 @@ $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
             </section>
         </div>
     </main>
+
+    <?php if (!isset($_SESSION['user_id'])): ?>
+        <div id="guest-inform-floating" class="fixed bottom-4 right-4 z-30 w-[320px] max-w-[90vw]">
+            <?php include __DIR__ . '/inform_block.php'; ?>
+        </div>
+        <script>
+            (function(){
+                const box = document.getElementById('guest-inform-floating');
+                if(!box) return;
+                const btn = box.querySelector('[data-dismiss]');
+                if(btn){
+                    btn.addEventListener('click',()=>{
+                        box.classList.add('opacity-0','translate-y-2');
+                        setTimeout(()=>{ box.style.display='none'; },280);
+                    });
+                }
+            })();
+        </script>
+    <?php endif; ?>
 
     <script>
         const likeBtn = document.getElementById('likeButton');

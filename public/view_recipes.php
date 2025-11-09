@@ -1,4 +1,5 @@
 <?php
+// Main recipe listing page with hero, featured item, filters, and like/save interactions.
 // View: All Recipes listing page
 // Layout overview:
 // - Full-bleed hero at the top (breaks out of centered container) with split background images (hero1 left, hero2 right)
@@ -28,7 +29,6 @@ function parseSimpleMarkdown($text)
 
     return $text;
 }
-$isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin'; // retained (not used now, but harmless)
 ?>
 <!DOCTYPE html>
 <html lang="en">

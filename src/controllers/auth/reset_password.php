@@ -1,4 +1,5 @@
 <?php
+// Handles the simple email-based reset flow triggered from forgot_password.php.
 require_once __DIR__ . '/../../../config/config.php';
 
 $email = $_POST['email'] ?? '';

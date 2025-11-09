@@ -1,5 +1,5 @@
 <?php
-// src/controllers/auth/register.php
+// Creates a new account, enforcing password policy and seeding recovery words for future resets.
 require_once __DIR__ . '/../../../config/config.php'; // Load $pdo and env()
 require_once __DIR__ . '/../../helpers/recovery_words.php';
 

@@ -2,6 +2,7 @@
 
 <!-- Global styles moved to /public/css/app.css via Tailwind build -->
 
+<!-- Fixed top navigation bar shared across public pages. -->
 <nav class="fixed inset-x-0 top-0 z-50 bg-[#FAF7F2] text-black shadow">
   <div class="mx-auto max-w-6xl px-4">
     <div class="flex h-14 items-center justify-between gap-3">

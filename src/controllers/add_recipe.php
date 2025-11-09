@@ -1,4 +1,5 @@
 <?php
+// Processes the "Add Recipe" form, including uploads, ingredient rows, and step images.
 require_once __DIR__ . '/../../config/config.php';
 
 if (!isset($_SESSION['user_id'])) {
@@ -71,6 +72,7 @@ if (!empty($errors)) {
 }
 
 try {
+    // Use a transaction so recipe metadata, ingredients, and steps land together.
     $pdo->beginTransaction();
 
     // Ensure category column conforms to ENUM of allowed categories (best-effort)

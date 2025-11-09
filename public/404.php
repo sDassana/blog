@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Simple 404 page used when a resource is not found. -->
 <html lang="en">
   <head>
     <?php $pageTitle = '404 · The Cookie Lovestoblog'; include __DIR__ . '/partials/header.php'; ?>

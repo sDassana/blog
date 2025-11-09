@@ -1,4 +1,5 @@
 <?php
+// Updates an existing recipe, syncing metadata, ingredients, steps, and optional images.
 require_once __DIR__ . '/../../config/config.php';
 
 if (!isset($_SESSION['user_id'])) {

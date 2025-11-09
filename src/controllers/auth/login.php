@@ -1,5 +1,5 @@
 <?php
-// src/controllers/auth/login.php
+// Handles POSTed credentials from the public login form and seeds the user session.
 require_once __DIR__ . '/../../../config/config.php';
 
 // Always use the themed public login page for GET requests
@@ -37,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } catch (Exception $e) {
             $errors[] = 'Database error. Please try again later.';
+            // Persist a short diagnostic entry without exposing details to end users.
             @file_put_contents(
                 __DIR__ . '/../../../logs/errors.log',
                 "[" . date('Y-m-d H:i:s') . "] " . $e->getMessage() . PHP_EOL,

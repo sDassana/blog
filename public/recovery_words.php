@@ -1,4 +1,5 @@
 <?php
+// Interface for generating or saving a fresh set of recovery words for the logged-in user.
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../src/helpers/recovery_words.php';
 
@@ -7,12 +8,8 @@ if (!isset($_SESSION['user_id'])) {
   exit;
 }
 
-// Handle regenerate action locally (no DB writes)
-if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && ($_POST['action'] ?? '') === 'regen') {
-  $candidate = pick_random_words(5);
-} else {
-  $candidate = pick_random_words(5);
-}
+// Always generate a fresh candidate set on load; form submission already reloads the page.
+$candidate = pick_random_words(5);
 
 $preview = $_SESSION['recovery_preview'] ?? null;
 unset($_SESSION['recovery_preview']);

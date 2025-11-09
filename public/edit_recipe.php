@@ -1,4 +1,5 @@
 <?php
+// Recipe editing page that preloads existing details for the owner or an admin.
 require_once __DIR__ . '/../config/config.php';
 
 $recipe_id = $_GET['id'] ?? null;
@@ -146,8 +147,11 @@ $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
         element: document.getElementById('description'),
         placeholder: 'Short description (Markdown supported)',
         spellChecker: false,
-        toolbar: ['bold', 'italic', 'heading', '|', 'quote', 'unordered-list', 'ordered-list', '|', 'link', 'image', '|', 'preview', 'side-by-side', 'fullscreen', '|', 'guide'],
-        status: false
+        toolbar: ['bold', 'italic', '|', 'unordered-list', 'ordered-list', '|', 'link', '|', 'preview', 'guide'],
+        status: false,
+        codemirror: {
+          inputStyle: 'contenteditable'
+        }
       });
 
       // Store SimpleMDE instances for step textareas
@@ -159,8 +163,11 @@ $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
           element: textarea,
           placeholder: 'Describe this step (Markdown supported)',
           spellChecker: false,
-          toolbar: ['bold', 'italic', '|', 'unordered-list', 'ordered-list', '|', 'link', 'image', '|', 'preview', 'guide'],
-          status: false
+          toolbar: ['bold', 'italic', '|', 'unordered-list', 'ordered-list', '|', 'link', '|', 'preview', 'guide'],
+          status: false,
+          codemirror: {
+            inputStyle: 'contenteditable'
+          }
         });
         stepEditors.set(textarea, editor);
       });
@@ -195,8 +202,11 @@ $steps = $stepsStmt->fetchAll(PDO::FETCH_ASSOC);
           element: textarea,
           placeholder: 'Describe this step (Markdown supported)',
           spellChecker: false,
-          toolbar: ['bold', 'italic', '|', 'unordered-list', 'ordered-list', '|', 'link', 'image', '|', 'preview', 'guide'],
-          status: false
+          toolbar: ['bold', 'italic', '|', 'unordered-list', 'ordered-list', '|', 'link', '|', 'preview', 'guide'],
+          status: false,
+          codemirror: {
+            inputStyle: 'contenteditable'
+          }
         });
         stepEditors.set(textarea, editor);
 

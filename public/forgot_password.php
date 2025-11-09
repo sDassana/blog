@@ -1,4 +1,5 @@
 <?php
+// Recovery form where users enter their email, recovery words, and a new password.
 require_once __DIR__ . '/../config/config.php';
 ?>
 <!DOCTYPE html>

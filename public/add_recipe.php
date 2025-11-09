@@ -1,4 +1,5 @@
 <?php
+// Recipe creation page shown to authenticated users with markdown-enabled fields.
 require_once __DIR__ . '/../config/config.php';
 if (!isset($_SESSION['user_id'])) {
   header("Location: /blog/public/login.php");
@@ -123,8 +124,11 @@ include __DIR__ . '/partials/header.php';
         element: document.getElementById('description'),
         placeholder: 'Write a short summary... Use Markdown for formatting',
         spellChecker: false,
-        toolbar: ['bold', 'italic', 'heading', '|', 'quote', 'unordered-list', 'ordered-list', '|', 'link', 'image', '|', 'preview', 'side-by-side', 'fullscreen', '|', 'guide'],
-        status: false
+        toolbar: ['bold', 'italic', '|', 'unordered-list', 'ordered-list', '|', 'link', '|', 'preview', 'guide'],
+        status: false,
+        codemirror: {
+          inputStyle: 'contenteditable'
+        }
       });
 
       // Store SimpleMDE instances for step textareas
@@ -170,8 +174,11 @@ include __DIR__ . '/partials/header.php';
           element: initialStepTextarea,
           placeholder: 'Describe this step (Markdown supported)',
           spellChecker: false,
-          toolbar: ['bold', 'italic', '|', 'unordered-list', 'ordered-list', '|', 'link', 'image', '|', 'preview', 'guide'],
-          status: false
+          toolbar: ['bold', 'italic', '|', 'unordered-list', 'ordered-list', '|', 'link', '|', 'preview', 'guide'],
+          status: false,
+          codemirror: {
+            inputStyle: 'contenteditable'
+          }
         });
         stepEditors.set(initialStepTextarea, editor);
         attachStepEditorListeners(editor);
@@ -207,8 +214,11 @@ include __DIR__ . '/partials/header.php';
           element: textarea,
           placeholder: 'Describe this step (Markdown supported)',
           spellChecker: false,
-          toolbar: ['bold', 'italic', '|', 'unordered-list', 'ordered-list', '|', 'link', 'image', '|', 'preview', 'guide'],
-          status: false
+          toolbar: ['bold', 'italic', '|', 'unordered-list', 'ordered-list', '|', 'link', '|', 'preview', 'guide'],
+          status: false,
+          codemirror: {
+            inputStyle: 'contenteditable'
+          }
         });
         stepEditors.set(textarea, editor);
         attachStepEditorListeners(editor);

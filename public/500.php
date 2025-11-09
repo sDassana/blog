@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Friendly 500 error page shown when the app hits an unexpected exception. -->
 <html lang="en">
   <head>
     <?php $pageTitle = '500 · The Cookie Lovestoblog'; include __DIR__ . '/partials/header.php'; ?>

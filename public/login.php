@@ -1,4 +1,5 @@
 <?php
+// Branded login page that displays flash messages and posts to the auth controller.
 require_once __DIR__ . '/../config/config.php';
 $errors = $_SESSION['login_errors'] ?? [];
 $old_email = $_SESSION['old_email'] ?? '';
