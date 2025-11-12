@@ -1,20 +1,22 @@
-# The Cookie – PHP Recipe Sharing Blog
+# The Cookie – Recipe Sharing Blog
 
-The Cookie is a modern, responsive recipe sharing platform built with PHP 8 and MySQL. It features user authentication, profile management, recipe CRUD with images and steps, likes, comments, search with pagination, and built in pure PHP with a lightweight structure and no framework dependencies.
+The Cookie is a modern, responsive recipe-sharing platform built with PHP 8 and MySQL. It powers a full publishing workflow with user authentication, Markdown-enabled recipe instructions, likes, comments, and search-friendly recipe discovery — Built from scratch as part of the IN2120 Web Application Development assignment using pure PHP and Tailwind CSS.
 
 ## Live Demo
 
-- Website: Coming soon 
+- **Website:** https://thecookie.lovestoblog.com
 
 ## Overview
 
-Users can:
+The Cookie is a full-stack recipe platform where users can:
 
-- Register, login, logout, and manage profiles (display name, email, password)
-- Create, edit, and delete recipes with main images, ingredients, and step-by-step photos
-- Like/unlike recipes and post comments
-- Browse with search (title/tags)
-- Navigate a responsive, accessible UI that adapts to Desktop and Mobile devices
+- Secure registration, login, logout, and session handling
+- Rich recipe authoring with Markdown, cover images, ingredients, and step-by-step instructions
+- Like/unlike interactions and comment discussions on recipes
+- Search and pagination for effortless recipe discovery
+- Save favorite recipes for quick access
+- Responsive, accessibility-aware UI that adapts to any device
+- User profile management (update name, email, password)
 
 ## Tech Stack
 
@@ -22,61 +24,68 @@ Users can:
 | --------------- | ----------------------------------------------------------- |
 | Frontend        | HTML5, Tailwind CSS, JavaScript                             |
 | Backend         | PHP 8+ (procedural with sessions)                           |
-| Database        | MySQL (MariaDB for infinityfree)                            |
-| Hosting         | Apache (XAMPP locally; any PHP host in production)          |
+| Database        | MySQL                                                       |
+| Hosting         | InfinityFree free hosting service                           |
+| Domain          | .lovestoblog.com subdomain                                  |
 | Version Control | Git + GitHub                                                |
-| Security        | `.env` config, prepared statements, server-side logging     |
+| Security        | HTTPS (Auto-SSL), PDO prepared statements, session tokens   |
 
 ## Core Features
 
-### Authentication and Profile
+### Authentication and Authorization
 
 - Register/login/logout using `password_hash()` and `password_verify()`
-- Secure sessions and flash messaging
-- Profile fields: display name
+- Secure sessions and cookie handling
+- Password recovery with secure recovery words
 
-### Recipe CRUD
+### Recipe CRUD Operations
 
-- Create, read, update, and delete recipes
-- Main image upload stored under `public/uploads/`
-- Ingredients list and ordered steps with optional step images
+- Create, read, update, delete recipes
+- Upload and display recipe cover images stored in `/public/uploads`
+- Markdown formatting for recipe descriptions and steps
+- Multi-ingredient and multi-step recipe structure
 
 ### Likes and Comments
 
-- Like or unlike recipes; live like count
+- Like or unlike recipes via a dedicated `recipe_likes` table
+- Display dynamic like counts
 - Comment system with user attribution and timestamps
+- Delete own comments
 
-### Search and Pagination
+### Search and Save
 
-- Search by recipe title or tags (safe prepared statements)
-- Paginated listing (15 per page) with context-preserving back links
+- Search recipes by title
+- Paginated recipe listings (12 per page)
+- Save/unsave favorite recipes for quick access
 
-### Responsive UI and Theming
+### User Profiles
 
-- Tailwind CSS utility-first design (compiled via PostCSS/Tailwind CLI)
-- Theme: white background, creamy off-white navbar (`#FAF7F2`), tomato accent (`#ff6347`), 15px-rounded primary controls
+- Update display name, email, and password
+- View own recipes on personal dashboard
+- Profile picture upload support
+
+### Responsive UI
+
+- Tailwind CSS utility-first design
+- Mobile-friendly navigation with dynamic login/register state
+- Clean recipe cards with hover effects
 
 ## Project Structure
 
 ```
-blog/
-├── .env.example
-├── .gitignore
-├── .htaccess
-├── composer.json
-├── index.php
-├── package.json                      # Tailwind/PostCSS build scripts
-├── package-lock.json
-├── postcss.config.js                 # PostCSS/Autoprefixer config
-├── tailwind.config.js                # Tailwind config (content paths/theme)
+c:\xampp\htdocs\blog\
 ├── README.md
-├── structure.md                      # Full tree with descriptions
-├── config/
-│   └── config.php                    # Loads .env, creates $pdo, logs errors
-├── logs/
-│   ├── errors.log                    # Runtime error log (ignored in Git)
+├── recipe_blog.sql            # Database schema / seeds (if present)
+├── structure.md
+├── package.json               # Tailwind / PostCSS build scripts
+├── postcss.config.js
+├── tailwind.config.js
+├── index.php                  # Public entry (optional route)
+├── config\
+│   └── config.php             # DB config / bootstrap (edit for local DB creds)
+├── logs\
 │   └── .gitkeep
-├── public/
+├── public\
 │   ├── 404.php
 │   ├── 500.php
 │   ├── about.php
@@ -89,29 +98,23 @@ blog/
 │   ├── register.php
 │   ├── saved_recipes.php
 │   ├── view_recipes.php
-│   ├── assets/
-│   │   ├── brand.png
-│   │   ├── hero-cookies.svg
-│   │   └── icons/
-│   │       ├── facebook.png
-│   │       ├── instagram.png
-│   │       ├── linkedin.png
-│   │       └── x.png
-│   ├── css/
-│   │   ├── app.css                   # Tailwind compiled output
-│   │   └── tw-input.css              # Tailwind input (with @tailwind)
-│   ├── js/
+│   ├── assets\
+│   │   └── icons\
+│   ├── css\
+│   │   ├── app.css            # Compiled Tailwind output (generated)
+│   │   ├── override.css
+│   │   └── tw-input.css       # Tailwind source/input file
+│   ├── js\
 │   │   ├── file-input.js
-│   ├── partials/
+│   │   └── markdown.js
+│   ├── partials\
 │   │   ├── footer.php
+│   │   ├── header.php
 │   │   └── topbar.php
-│   └── uploads/
-│       ├── .htaccess                 # Blocks script execution
-│       ├── .gitkeep
-│       ├── recipe_*.jpg/png          # Main recipe images (generated names)
-│       └── step_*.jpg/png            # Step-by-step images (generated names)
-└── src/
-    ├── controllers/
+│   └── uploads\
+│       └── (user uploaded images)
+└── src\
+    ├── controllers\
     │   ├── add_comment.php
     │   ├── add_recipe.php
     │   ├── delete_comment.php
@@ -126,89 +129,101 @@ blog/
     │   ├── update_password.php
     │   ├── update_profile.php
     │   └── update_recipe.php
-    ├── helpers/
-    │   ├── flash.php
-    │   ├── markdown.php
-    │   ├── recovery_words.php
-    │   └── redirect.php
+    └── helpers\
+        ├── flash.php
+        ├── markdown.php
+        ├── recovery_words.php
+        ├── redirect.php
+        └── session.php
 ```
 
 ## Security and Configuration
 
-Environment variables in `.env` (kept out of Git):
+Database credentials configured in `config/config.php`:
 
-```env
-DB_HOST=127.0.0.1
-DB_NAME=recipe_blog_app
-DB_USER=root
-DB_PASS=
-DB_PORT=3306
+```php
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'recipe_blog');
+define('DB_USER', 'root');
+define('DB_PASS', '');
+define('DB_PORT', '3306');
 ```
 
 Additional safeguards:
 
-- `.gitignore` prevents committing `.env`, logs, and uploaded files; only `.gitkeep` placeholders are tracked
-- Prepared statements for all DB operations (via PDO)
-- Error details are logged to `logs/errors.log`; users see a generic message
-- Consider enforcing HTTPS in production via web server config or `.htaccess`
-- `public/uploads/` is protected by an `.htaccess` that blocks script execution; uploaded filenames are sanitized and saved with safe, MIME-validated extensions
+- PDO prepared statements for all database operations
+- Password hashing using `password_hash()` and `password_verify()`
+- Session regeneration on login to prevent fixation
+- File upload validation (type, size, sanitized names)
+- SSL certificate automatically provisioned by InfinityFree
 
-## Database Schema (expected)
+## Database Schema
 
-Tables used by the app:
+Tables:
 
-- `user` (`id`, `username`, `email`, `password_hash`, `role`, `created_at`)
-- `recipe` (`id`, `user_id`, `title`, `category`, `tags`, `image_main`, `created_at`)
-- `recipe_ingredients` (`id`, `recipe_id`, `ingredient_name`, `quantity`)
-- `recipe_steps` (`id`, `recipe_id`, `step_number`, `step_description`, `step_image`)
+- `user` (`id`, `username`, `email`, `password`, `display_name`, `bio`, `profile_picture`, `created_at`)
+- `recipe` (`id`, `user_id`, `title`, `description`, `prep_time`, `cook_time`, `servings`, `image`, `created_at`, `updated_at`)
+- `recipe_ingredients` (`id`, `recipe_id`, `ingredient_text`, `sort_order`)
+- `recipe_steps` (`id`, `recipe_id`, `step_number`, `instruction`)
 - `recipe_likes` (`id`, `recipe_id`, `user_id`, `created_at`)
-- `recipe_comments` (`id`, `recipe_id`, `user_id`, `comment_text`, `created_at`)
+- `recipe_saves` (`id`, `recipe_id`, `user_id`, `created_at`)
+- `recipe_comments` (`id`, `recipe_id`, `user_id`, `comment`, `created_at`)
 
 Relationships:
 
 - One-to-many: `user` → `recipe`
-- One-to-many: `recipe` → `recipe_ingredients`, `recipe_steps`, `recipe_comments`
-- Many-to-many (logical): `user` ↔ `recipe` through `recipe_likes`
+- One-to-many: `recipe` → `recipe_ingredients`
+- One-to-many: `recipe` → `recipe_steps`
+- One-to-many: `recipe` → `recipe_comments`
+- Many-to-many: `user` ↔ `recipe` through `recipe_likes`
+- Many-to-many: `user` ↔ `recipe` through `recipe_saves`
 
-If you need, we can generate a SQL schema and seed data matching this codebase.
 
 ## Testing Checklist
 
 | Area     | Test                                                                 |
-|----------|----------------------------------------------------------------------|
-| Auth     | Register/login/logout with valid/invalid credentials                 |
+| -------- | -------------------------------------------------------------------- |
+| Auth     | Register/login/logout with valid and invalid credentials            |
 | Profile  | Update display name, email, and password                             |
-| CRUD     | Create/edit/delete recipe with images, ingredients, steps            |
-| Likes    | Like/unlike updates the count and UI                                 |
-| Comments | Add/delete comments; correct attribution and timestamps              |
-| Search   | Search by title/tags; pagination returns correct pages               |
-| UI       | Responsive layout; accessible controls and color contrast            |
-| Errors   | DB failures logged; user sees friendly error page                    |
+| CRUD     | Create, edit, delete recipe with images, ingredients, steps         |
+| Likes    | Like/unlike updates and persists correctly                           |
+| Saves    | Save/unsave recipes and view saved recipes page                      |
+| Comments | Add and delete comments under recipes                                |
+| Search   | Search by recipe title with pagination                               |
+| UI       | Responsive layout on mobile and desktop devices                      |
+| Database | Tables populated correctly without orphaned records                  |
+| Files    | Image uploads work and are stored in `public/uploads/`               |
 
-## Deployment
+## Deployment Details (Production)
 
-- Local: XAMPP (Apache + MySQL) — place under `htdocs` and configure `.env`
-- Production: any PHP hosting with MySQL — configure virtual host and `.env`
-- Ensure `public/uploads/` is writable by the web server
-- Enforce HTTPS and secure session settings in production (you can use an `.htaccess` redirect)
-- Optional: compatible with popular free/shared PHP hosts (for example, InfinityFree); remember to set correct DB credentials and enable SSL if available
+- Hosting: InfinityFree (free PHP hosting)
+- Domain: `thecookie.lovestoblog.com`
+- Database: Imported via phpMyAdmin
+- `.env`: Uploaded with production credentials
+- SSL: Automatically enabled through InfinityFree
+- HTTPS: Enforced via `.htaccess` redirect
 
 ## Developer
 
 - Sathnuwan Dassana
+- University of Moratuwa
+- BSc (Hons) in Information Technology & Management
+- Level 02, Semester 01
+- IN2120 – Web Application Development
 
 ## License and Usage
 
-This project is created for learning and portfolio purposes. You’re welcome to explore, learn from, and extend the code. If you reuse substantial parts of the design or implementation, please credit “Sathnuwan Dassana – The Cookie.”
+Project created for educational purposes as part of coursework. You may explore, learn from, and extend the code. Please credit Sathnuwan Dassana when reusing the project or its design.
 
 ## Acknowledgements
 
-- Tailwind CSS for rapid UI development
+- Tailwind CSS for rapid interface development
+- Parsedown library for Markdown rendering
 - Official PHP and MySQL documentation
-- GitHub Student Developer Pack (optional tools and credits)
+- GitHub Student Developer Pack
+- GitHub for version control
 
 ## Final Deployment
 
-- Production: add your live URL here once deployed
-
-
+- **Production:** https://thecookie.lovestoblog.com
+  Secure, responsive, and feature-complete — ready for recipe sharing.
